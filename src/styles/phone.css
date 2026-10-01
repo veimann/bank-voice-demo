@@ -1,0 +1,276 @@
+.phone {
+  width: 300px;
+  height: 620px;
+  background: linear-gradient(160deg, #202023, #0b0b0c);
+  border-radius: 52px;
+  padding: 14px;
+  box-shadow: var(--shadow-soft), 0 0 0 2px rgba(0, 0, 0, 0.04);
+  position: relative;
+  flex: none;
+}
+
+.phone-island {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 26px;
+  background: #0b0b0c;
+  border-radius: 16px;
+  z-index: 5;
+}
+
+.phone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #ffffff, #fbfcfb);
+  border-radius: 38px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 26px 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sp-ink);
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sp-ink);
+}
+
+/* ---- CIBA-style push notification banner ---- */
+.ciba-banner {
+  position: absolute;
+  top: 48px;
+  left: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+  transform: translateY(-160%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.3s ease;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.ciba-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+  animation: cibaNudge 2.4s ease-in-out 0.6s infinite;
+}
+
+@keyframes cibaNudge {
+  0%, 85%, 100% { transform: translateY(0); }
+  92% { transform: translateY(-3px); }
+}
+
+.ciba-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--sp-green);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.ciba-copy { flex: 1; min-width: 0; }
+
+.ciba-title { font-weight: 700; font-size: 13px; }
+
+.ciba-sub {
+  font-size: 12px;
+  color: var(--sp-gray-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ciba-now {
+  font-size: 11px;
+  color: var(--sp-gray-400);
+  align-self: flex-start;
+}
+
+/* ---- Idle / in-call view ---- */
+.call-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  text-align: center;
+}
+
+.call-avatar {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: var(--sp-green-light);
+  color: var(--sp-green-dark);
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.call-name { font-size: 20px; font-weight: 700; }
+
+.call-sub { font-size: 14px; color: var(--sp-gray-700); min-height: 18px; }
+
+.call-timer {
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  color: var(--sp-gray-700);
+  min-height: 18px;
+}
+
+.call-actions { margin-top: 16px; display: flex; gap: 20px; }
+
+.call-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease;
+  color: #fff;
+}
+
+.call-btn:hover { transform: translateY(-2px); }
+.call-btn:disabled { cursor: progress; opacity: 0.85; }
+
+.call-btn--start { background: var(--sp-green); }
+.call-btn--end { background: var(--sp-red); }
+
+.phone.is-connecting .call-btn--start {
+  animation: callPulse 1.2s infinite;
+}
+
+@keyframes callPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 170, 70, 0.45); }
+  50% { box-shadow: 0 0 0 14px rgba(0, 170, 70, 0); }
+}
+
+.call-error {
+  color: var(--sp-red);
+  font-size: 12px;
+  line-height: 1.4;
+  max-width: 220px;
+  margin: 6px 0 0;
+}
+
+/* ---- Face ID style overlay ---- */
+.faceid-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 10, 9, 0.94);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 30;
+  border-radius: 38px;
+}
+
+.faceid-overlay.show { opacity: 1; pointer-events: auto; }
+
+.faceid-rings {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faceid-rings span {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 170, 70, 0.55);
+  animation: faceRing 1.8s ease-out infinite;
+}
+
+.faceid-rings span:nth-child(2) { animation-delay: 0.4s; }
+.faceid-rings span:nth-child(3) { animation-delay: 0.8s; }
+
+@keyframes faceRing {
+  0% { transform: scale(0.5); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.faceid-core {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.faceid-face,
+.faceid-check {
+  position: absolute;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.faceid-check { opacity: 0; transform: scale(0.6); color: var(--sp-green); }
+.faceid-face { opacity: 1; transform: scale(1); }
+
+.faceid-overlay.success .faceid-rings span {
+  animation: none;
+  border-color: var(--sp-green);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.faceid-overlay.success .faceid-face { opacity: 0; transform: scale(0.6); }
+.faceid-overlay.success .faceid-check { opacity: 1; transform: scale(1); }
+
+.faceid-label {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
