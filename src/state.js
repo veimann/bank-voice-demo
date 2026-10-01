@@ -16,6 +16,7 @@ export const appState = {
   auth: {
     status: 'idle', // idle | initiated | scanning | authenticated
     customerId: null,
-    pendingCustomerId: null
+    pendingCustomerId: null,
+    customer: null // the resolved customer record, once authenticated — reused by the Genesys handoff view
   }
 };

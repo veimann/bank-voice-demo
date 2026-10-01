@@ -175,6 +175,19 @@
 .call-btn--start { background: var(--sp-green); }
 .call-btn--end { background: var(--sp-red); }
 
+.call-btn--mute {
+  width: 52px;
+  height: 52px;
+  background: var(--sp-gray-200);
+  color: var(--sp-ink);
+  box-shadow: none;
+}
+
+.call-btn--mute.is-muted {
+  background: var(--sp-red);
+  color: #fff;
+}
+
 .phone.is-connecting .call-btn--start {
   animation: callPulse 1.2s infinite;
 }

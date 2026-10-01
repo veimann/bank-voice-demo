@@ -8,18 +8,22 @@
 let onStartCall = null;
 let onEndCall = null;
 let onBannerTap = null;
+let onToggleMute = null;
 
-export function initPhoneUI({ onStart, onEnd, onBannerTap: onTap }) {
+export function initPhoneUI({ onStart, onEnd, onBannerTap: onTap, onToggleMute: onMute }) {
   onStartCall = onStart;
   onEndCall = onEnd;
   onBannerTap = onTap;
+  onToggleMute = onMute;
 
   const startBtn = document.getElementById('callStartBtn');
   const endBtn = document.getElementById('callEndBtn');
+  const muteBtn = document.getElementById('callMuteBtn');
   const banner = document.getElementById('cibaBanner');
 
   if (startBtn) startBtn.addEventListener('click', () => onStartCall && onStartCall());
   if (endBtn) endBtn.addEventListener('click', () => onEndCall && onEndCall());
+  if (muteBtn) muteBtn.addEventListener('click', () => onToggleMute && onToggleMute());
   if (banner) {
     banner.addEventListener('click', () => onBannerTap && onBannerTap());
     banner.addEventListener('keydown', (e) => {
@@ -45,6 +49,7 @@ export function setCallStatus(status) {
   const sub = document.getElementById('callSub');
   const startBtn = document.getElementById('callStartBtn');
   const endBtn = document.getElementById('callEndBtn');
+  const muteBtn = document.getElementById('callMuteBtn');
   if (!phone) return;
 
   phone.classList.remove('is-idle', 'is-connecting', 'is-active');
@@ -54,15 +59,31 @@ export function setCallStatus(status) {
     if (sub) sub.textContent = 'Customer Service';
     if (startBtn) { startBtn.hidden = false; startBtn.disabled = false; }
     if (endBtn) endBtn.hidden = true;
+    if (muteBtn) muteBtn.hidden = true;
     setCallTimer('');
+    setMicMuted(false);
   } else if (status === 'connecting') {
     if (sub) sub.textContent = 'Connecting…';
     if (startBtn) startBtn.disabled = true;
+    if (muteBtn) muteBtn.hidden = true;
   } else if (status === 'active') {
     if (sub) sub.textContent = 'Connected';
     if (startBtn) startBtn.hidden = true;
     if (endBtn) endBtn.hidden = false;
+    if (muteBtn) muteBtn.hidden = false;
   }
+}
+
+export function setMicMuted(muted) {
+  const muteBtn = document.getElementById('callMuteBtn');
+  const onIcon = document.getElementById('micOnIcon');
+  const offIcon = document.getElementById('micOffIcon');
+  if (muteBtn) {
+    muteBtn.classList.toggle('is-muted', Boolean(muted));
+    muteBtn.setAttribute('aria-label', muted ? 'Unmute microphone' : 'Mute microphone');
+  }
+  if (onIcon) onIcon.hidden = Boolean(muted);
+  if (offIcon) offIcon.hidden = !muted;
 }
 
 export function setCallTimer(text) {

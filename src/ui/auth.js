@@ -27,7 +27,7 @@ export function resetAuth() {
     clearTimeout(faceIdTimeout);
     faceIdTimeout = null;
   }
-  appState.auth = { status: 'idle', customerId: null, pendingCustomerId: null };
+  appState.auth = { status: 'idle', customerId: null, pendingCustomerId: null, customer: null };
   phoneUI.hideCibaNotification();
   phoneUI.hideFaceId();
   lockCustomerPanel();
@@ -80,7 +80,10 @@ async function completeAuthentication(customerId) {
   try {
     const customer = await getCustomerById(customerId);
     if (!customer) showCustomerError();
-    else unlockCustomerPanel(customer);
+    else {
+      appState.auth.customer = customer; // reused by the Genesys handoff view
+      unlockCustomerPanel(customer);
+    }
   } catch (e) {
     console.warn('[auth] could not load customer record:', e);
     showCustomerError();

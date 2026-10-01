@@ -6,15 +6,17 @@
 import * as phoneUI from './ui/phone.js';
 import { initPresenterControls } from './ui/presenter.js';
 import { triggerAuthentication } from './ui/auth.js';
-import { startCall, endCall } from './integrations/livekit.js';
+import { startCall, endCall, toggleMicMute } from './integrations/livekit.js';
 import { lockCustomerPanel } from './ui/customerPanel.js';
 import { clearTranscript } from './ui/transcript.js';
+import { initGenesysView } from './ui/genesys.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   phoneUI.initPhoneUI({
     onStart: () => startCall('fi'), // the visible call button always calls the Finnish entry point
     onEnd: () => endCall(),
-    onBannerTap: () => triggerAuthentication()
+    onBannerTap: () => triggerAuthentication(),
+    onToggleMute: () => toggleMicMute()
   });
 
   phoneUI.setCallStatus('idle');
@@ -22,4 +24,5 @@ document.addEventListener('DOMContentLoaded', () => {
   clearTranscript();
 
   initPresenterControls();
+  initGenesysView();
 });

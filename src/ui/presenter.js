@@ -17,6 +17,7 @@ import { triggerAuthentication, resetAuth } from './auth.js';
 import { startCall, endCall } from '../integrations/livekit.js';
 import { clearTranscript } from './transcript.js';
 import { lockCustomerPanel } from './customerPanel.js';
+import { resetGenesysView } from './genesys.js';
 import * as phoneUI from './phone.js';
 
 let panelOpen = false;
@@ -95,6 +96,7 @@ async function resetDemo() {
   resetAuth();
   clearTranscript();
   lockCustomerPanel();
+  resetGenesysView();
   phoneUI.setCallStatus('idle');
   phoneUI.clearCallError();
   appState.language = 'fi';

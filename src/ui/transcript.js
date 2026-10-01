@@ -8,7 +8,16 @@
 const DEFAULT_EMPTY_TEXT = 'Transcript will appear here once the call connects.';
 const segmentEls = {};
 
-export function onTranscriptSegment(id, text, isFinal, role) {
+/* The agent's text can arrive wrapped in SSML, e.g. "<speak>...</speak>" —
+   strip any markup tags before displaying it. Customer speech (from STT)
+   never contains tags, so this is a no-op for that role. */
+function cleanText(text, role) {
+  if (role !== 'assistant') return text;
+  return text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+export function onTranscriptSegment(id, rawText, isFinal, role) {
+  const text = cleanText(rawText, role);
   if (!text || !text.trim()) return;
   const body = document.getElementById('transcriptBody');
   if (!body) return;

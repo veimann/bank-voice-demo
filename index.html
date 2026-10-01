@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/src/styles/main.css" />
   <link rel="stylesheet" href="/src/styles/phone.css" />
   <link rel="stylesheet" href="/src/styles/panels.css" />
+  <link rel="stylesheet" href="/src/styles/genesys.css" />
 </head>
 <body>
   <div class="page">
@@ -21,6 +22,10 @@
         <h1>S-Pankki</h1>
         <p class="tagline">AI Voice Banking Assistant — Live Demo</p>
       </div>
+      <button class="genesys-trigger" id="genesysTriggerBtn" type="button">
+        <span class="genesys-trigger-dot"></span>
+        Genesys
+      </button>
     </header>
 
     <main class="stage">
@@ -59,6 +64,10 @@
               <div class="call-actions">
                 <button class="call-btn call-btn--start" id="callStartBtn" aria-label="Call S-Pankki" type="button">
                   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1.02L6.6 10.8Z"/></svg>
+                </button>
+                <button class="call-btn call-btn--mute" id="callMuteBtn" aria-label="Mute microphone" type="button" hidden>
+                  <svg id="micOnIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M9 21h6"/></svg>
+                  <svg id="micOffIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" hidden><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M9 21h6"/><path d="M4 4l16 16"/></svg>
                 </button>
                 <button class="call-btn call-btn--end" id="callEndBtn" aria-label="End call" type="button" hidden>
                   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(135deg)"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1.02L6.6 10.8Z"/></svg>
@@ -127,6 +136,51 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Genesys-style contact-center handoff mockup, toggled by the visible "Genesys" button -->
+  <div class="genesys-overlay" id="genesysOverlay" hidden>
+    <div class="genesys-topbar">
+      <div class="genesys-brand">genesys<span class="genesys-brand-dot">•</span>cloud</div>
+      <div class="genesys-interaction-meta">
+        <span class="genesys-live-pill"><span class="dot"></span>Active interaction</span>
+        <span class="genesys-meta-text">Voice &middot; Transferred from AI Assistant</span>
+      </div>
+      <button class="genesys-close" id="genesysCloseBtn" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        Back to call view
+      </button>
+    </div>
+
+    <div class="genesys-body">
+      <section class="genesys-card">
+        <h3>Customer</h3>
+        <div class="genesys-customer-top">
+          <div class="genesys-avatar" id="genesysAvatar">?</div>
+          <div>
+            <div class="genesys-customer-name" id="genesysName">Not yet identified</div>
+            <div class="genesys-customer-segment" id="genesysSegment"></div>
+          </div>
+        </div>
+        <dl class="genesys-rows">
+          <div class="genesys-row"><dt>Personal ID</dt><dd id="genesysPersonalId">—</dd></div>
+          <div class="genesys-row"><dt>Date of birth</dt><dd id="genesysDob">—</dd></div>
+          <div class="genesys-row"><dt>Phone</dt><dd id="genesysPhone">—</dd></div>
+          <div class="genesys-row"><dt>Email</dt><dd id="genesysEmail">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="genesys-card">
+        <h3>AI Conversation Summary</h3>
+        <p class="genesys-summary-text" id="genesysSummary">—</p>
+        <h3>Interaction</h3>
+        <dl class="genesys-rows">
+          <div class="genesys-row"><dt>Queue</dt><dd id="genesysQueue">Personal Banking</dd></div>
+          <div class="genesys-row"><dt>Interaction ID</dt><dd id="genesysInteractionId">—</dd></div>
+          <div class="genesys-row"><dt>Wait time</dt><dd id="genesysWaitTime">00:42</dd></div>
+        </dl>
+      </section>
+    </div>
   </div>
 
   <!-- Hidden presenter controls — revealed with Shift+P -->

@@ -16,6 +16,7 @@ import * as phoneUI from '../ui/phone.js';
 let room = null;
 let remoteAudioEls = [];
 let durationTimer = null;
+let micMuted = false;
 
 function VoiceError(message) {
   this.name = 'VoiceError';
@@ -136,6 +137,8 @@ export async function startCall(lang = 'fi') {
 
     await room.connect(session.url, session.access_token);
     await room.localParticipant.setMicrophoneEnabled(true);
+    micMuted = false;
+    phoneUI.setMicMuted(false);
 
     clearTranscript();
     setLiveDot(true);
@@ -183,6 +186,7 @@ function cleanupAfterDisconnect() {
   });
   remoteAudioEls = [];
   room = null;
+  micMuted = false;
   appState.call.status = 'idle';
   appState.call.room = null;
   closeSessionSubscription();
@@ -196,6 +200,19 @@ export async function endCall() {
   } else {
     cleanupAfterDisconnect();
   }
+}
+
+export async function toggleMicMute() {
+  if (!room) return;
+  micMuted = !micMuted;
+  try {
+    await room.localParticipant.setMicrophoneEnabled(!micMuted);
+  } catch (e) {
+    console.warn('[livekit] mic toggle failed:', e);
+    micMuted = !micMuted; // revert optimistic state on failure
+    return;
+  }
+  phoneUI.setMicMuted(micMuted);
 }
 
 export function isCallActive() {

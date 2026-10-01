@@ -18,6 +18,13 @@
 
 * { box-sizing: border-box; }
 
+/* Any element toggled with the native `hidden` attribute must actually hide,
+   even if a more specific rule elsewhere sets `display` on it (e.g. a flex
+   layout class). Without this, `el.hidden = true` can silently do nothing. */
+[hidden] {
+  display: none !important;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -67,6 +74,34 @@ html, body {
   color: var(--sp-gray-700);
 }
 
+.genesys-trigger {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #1a1a1f;
+  color: #fff;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease;
+}
+
+.genesys-trigger:hover { transform: translateY(-1px); }
+
+.genesys-trigger-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff4f1f;
+  flex: none;
+}
+
 .stage {
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr) 320px;
@@ -97,7 +132,12 @@ html, body {
   padding: 22px 22px 20px;
   display: flex;
   flex-direction: column;
-  min-height: 560px;
+  height: 620px; /* fixed, matches the phone — content scrolls inside, page doesn't grow */
+  overflow: hidden;
+}
+
+@media (max-width: 1020px) {
+  .panel { height: 70vh; min-height: 420px; }
 }
 
 .panel-header {
