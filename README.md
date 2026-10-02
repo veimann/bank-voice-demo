@@ -11,7 +11,13 @@ This project is growing into a small multi-page demo hub:
   progress, not yet in this repo. Its boost.ai voice entry point for the Day-2
   outbound call: client `SPANKKIRFP`, same session URL as Part 2, external id
   `24785a28-7bfd-4bfd-825a-7af57d5564fc`.
-- ASRA ecosystem visualization — planned, not yet in this repo.
+- `asra.html` — **ASRA Ecosystem Visualization** (live). A 4-slide, keyboard
+  step-through of S-Pankki's ASRA RFP material (productivity drivers, scope,
+  reference/target architecture deep dive, maturity journey), each slide
+  ending on a "boost.ai lens" step. `→`/Space step, `Z` or click to enlarge,
+  `F` fullscreen, `1–4` jump, `?` help. Deep link with `#<slide>-<step>`,
+  e.g. `/asra.html#3-12`. Content is all in `asra.html`; the generic step
+  engine is `src/asra.js`, styles in `src/styles/asra.css`.
 
 Spoken conversation is Finnish throughout. Every label, button and message in
 the interface itself is in English, as requested.

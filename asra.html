@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASRA Ecosystem — boost.ai × S-Pankki</title>
+  <meta name="description" content="Interactive, zoomable walkthrough of S-Pankki's ASRA programme and where boost.ai fits" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/asra.css" />
+</head>
+<body>
+
+<!-- ======================= ICON SPRITE ======================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-mobile" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-team" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 14.5c3 0 6 1.5 6 4.5"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 10v10h16V10M3 10l2-6h14l2 6zM10 20v-6h4v6"/></symbol>
+    <symbol id="i-call" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+    <symbol id="i-idcard" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.5-1.5 1.7-2 3-2s2.5.5 3 2M14 10h4M14 13h3"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="2.5"/><circle cx="5.5" cy="17" r="2.5"/><circle cx="18.5" cy="17" r="2.5"/><path d="M12 8v3M10 12.5l-3 2.5M14 12.5l3 2.5"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 5a3 3 0 0 0-5.5-1.5A3 3 0 0 0 4 8a3 3 0 0 0 0 5 3 3 0 0 0 2.5 4.5A3 3 0 0 0 12 19zM12 5a3 3 0 0 1 5.5-1.5A3 3 0 0 1 20 8a3 3 0 0 1 0 5 3 3 0 0 1-2.5 4.5A3 3 0 0 1 12 19"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol>
+    <symbol id="i-robot" viewBox="0 0 24 24"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9.5" cy="13" r="1.2"/><circle cx="14.5" cy="13" r="1.2"/><path d="M12 4.5V8M9.5 16.5h5"/><circle cx="12" cy="3.5" r="1"/></symbol>
+    <symbol id="i-flow" viewBox="0 0 24 24"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="15" width="6" height="5" rx="1"/><circle cx="18" cy="6.5" r="2.5"/><path d="M9 6.5h6.5M18 9v6M15 17.5H6v-8"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="7" ry="2.5"/><path d="M5 5v14c0 1.4 3 2.5 7 2.5s7-1.1 7-2.5V5M5 12c0 1.4 3 2.5 7 2.5s7-1.1 7-2.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 7 18z"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></symbol>
+    <symbol id="i-coins" viewBox="0 0 24 24"><circle cx="9" cy="9" r="5"/><circle cx="15" cy="15" r="5"/></symbol>
+    <symbol id="i-piggy" viewBox="0 0 24 24"><path d="M4 12a7 6 0 0 1 13-3h2.5v4l-2 1a7 6 0 0 1-3 3v2.5h-3V18h-2v1.5h-3V17A6 6 0 0 1 4 12z"/><circle cx="15" cy="11" r=".8"/></symbol>
+    <symbol id="i-lend" viewBox="0 0 24 24"><path d="M3 16h4l5 2 7-3-1-2-5 1.5M7 16v-4h3l3 1"/><circle cx="15.5" cy="6.5" r="2.8"/></symbol>
+    <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9l9-5 9 5M5 9v9M10 9v9M14 9v9M19 9v9M3 20h18"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.5 6.5a4 4 0 0 0 5 5L11 20a2.1 2.1 0 0 1-3-3l8.5-8.5a4 4 0 0 1-2-2z"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/></symbol>
+    <symbol id="i-grow" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
+    <symbol id="i-expert" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-4.5-4.5"/><circle cx="11" cy="9.5" r="2"/><path d="M7.5 14.5c.7-1.4 2-2 3.5-2s2.8.6 3.5 2"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/></symbol>
+  </defs>
+</svg>
+
+<!-- ======================= CHROME ======================= -->
+<header class="chrome-top">
+  <a class="brand" href="/index.html" title="Back to the demo hub">
+    <span class="brand-mark">b.</span>
+    <span class="brand-text"><strong>boost.ai</strong> × S-Pankki <span class="sep">·</span> ASRA Ecosystem</span>
+  </a>
+  <nav class="slide-nav" id="slideNav" aria-label="Slides"></nav>
+  <div class="chrome-actions">
+    <button class="icon-btn" id="btnZoom" title="Enlarge (Z)" aria-label="Enlarge">
+      <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
+    </button>
+    <button class="icon-btn" id="btnFull" title="Fullscreen (F)" aria-label="Fullscreen">
+      <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+    <button class="icon-btn" id="btnHelp" title="Shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+  </div>
+</header>
+
+<main class="viewport" id="viewport">
+  <div class="canvas" id="canvas">
+
+    <!-- ================================================================
+         SLIDE 1 — PRODUCTIVITY DRIVERS
+         steps: 0 title · 1–4 rows · 5 boost.ai lens
+         ================================================================ -->
+    <section class="slide s-prod" data-steps="6" data-title="Productivity">
+      <div class="eyebrow">01 · Why ASRA</div>
+      <h1 class="title">We are targeting higher productivity<br/>and a more scalable operating model</h1>
+
+      <div class="prod-table" data-zoom="Productivity drivers and S-Bank targets">
+        <div class="prod-head">
+          <span>Productivity drivers</span>
+          <span>S-Bank targets</span>
+          <span class="lens-head" data-show="5"><i class="b-dot">b.</i> boost.ai lens</span>
+        </div>
+
+        <div class="prod-row f" data-show="1" data-focus="1" data-zoom="Fewer human contacts">
+          <div class="prod-driver"><span class="num">1</span>Fewer human contacts</div>
+          <div class="prod-target">Significant reduction in contact volume to customer service and in-person appointments.</div>
+          <div class="prod-lens" data-show="5">AI agents resolve routine chat and voice requests end-to-end, 24/7 — and hand over with full context when a human is needed.</div>
+        </div>
+
+        <div class="prod-row f" data-show="2" data-focus="2" data-zoom="More efficient case management">
+          <div class="prod-driver"><span class="num">2</span>More efficient case management</div>
+          <div class="prod-target">Significantly reduce manual back-office work in case handling to improve employee capacity utilisation and shorten handling and end-to-end resolution.<em>Improve customer and employee satisfaction.</em></div>
+          <div class="prod-lens" data-show="5">Agent actions through APIs and MCP open, enrich and update cases directly — the conversation becomes structured case data, not re-keying.</div>
+        </div>
+
+        <div class="prod-row f" data-show="3" data-focus="3" data-zoom="Sales growth">
+          <div class="prod-driver"><span class="num">3</span>Sales growth</div>
+          <div class="prod-target">Use AI, customer context and released employee capacity to generate more relevant sales opportunities.</div>
+          <div class="prod-lens" data-show="5">Customer context in every conversation lets the agent surface relevant, timely next steps — and route warm leads to advisors.</div>
+        </div>
+
+        <div class="prod-row f" data-show="4" data-focus="4" data-zoom="More precise resourcing">
+          <div class="prod-driver"><span class="num">4</span>More precise resourcing</div>
+          <div class="prod-target">Higher utilization of customer-facing staff.<em>More productive working time through precision resourcing.</em></div>
+          <div class="prod-lens" data-show="5">Contained demand flattens peaks; intent and conversation data feed forecasting so experts are scheduled where they matter.</div>
+        </div>
+      </div>
+
+      <p class="foot-note" data-show="5">boost.ai lens is illustrative — our reading of where the platform contributes to each S-Bank target.</p>
+    </section>
+
+    <!-- ================================================================
+         SLIDE 2 — SCOPE
+         steps: 0 overview · 1 case · 2 omni · 3 WEM · 4 KB · 5 AI-assisted · 6 lens
+         ================================================================ -->
+    <section class="slide s-scope" data-steps="7" data-title="Scope">
+      <div class="eyebrow">02 · ASRA scope</div>
+      <h1 class="title">Four capability areas,<br/>wrapped in AI-assisted service</h1>
+
+      <div class="scope-wrap">
+        <div class="scope-diagram f" data-focus="5" data-zoom="ASRA scope">
+          <div class="scope-kb f" data-focus="4"><span>Knowledge base</span>
+            <i class="lens-tag" data-show="6">Grounds every answer</i>
+          </div>
+          <div class="scope-stack">
+            <div class="scope-box sb-case f" data-focus="1">Case management
+              <i class="lens-tag" data-show="6">Opens &amp; updates cases</i>
+            </div>
+            <div class="scope-box sb-omni f" data-focus="2">Omnichannel contact center
+              <i class="lens-tag" data-show="6">Chat &amp; voice front door · handoff</i>
+            </div>
+            <div class="scope-box sb-wem f" data-focus="3">Work engagement management
+              <i class="lens-tag soft" data-show="6">Feeds demand &amp; intent data</i>
+            </div>
+          </div>
+          <div class="scope-ai f">AI-assisted service
+            <i class="lens-tag core" data-show="6">boost.ai core</i>
+          </div>
+        </div>
+
+        <div class="scope-side">
+          <div class="scope-intro" data-only="0">
+            <p class="big">ASRA is the solution enabler between S-Bank's channels and its core systems.</p>
+            <p>Its scope covers four capability areas — and AI-assisted service runs through all of them. Step through to open each one.</p>
+          </div>
+
+          <ol class="scope-list" data-only="1-5">
+            <li class="f" data-focus="1"><h3>Case management <small>&amp; orchestration</small></h3>
+              <p>Case status, service level management (SLA), routing, auditing and traceability.</p></li>
+            <li class="f" data-focus="2"><h3>Omnichannel contact center</h3>
+              <p>Voice, chat, email and messaging channels. Routing, queue management, recording, and the customer service agent desktop.</p></li>
+            <li class="f" data-focus="3"><h3>Work engagement management</h3>
+              <p>Workforce scheduling, demand forecasting, quality management, performance management and coaching.</p></li>
+            <li class="f" data-focus="4"><h3>Knowledge base</h3>
+              <p>Knowledge creation, maintenance and retrieval. Used by customer service representatives, agents, bots and service channels.</p></li>
+            <li class="f" data-focus="5"><h3>AI-assisted service</h3>
+              <p>Self-service, AI assistants and voice bots, leveraging the bank's common AI platform. <b>Guide · Assist · Automate.</b></p></li>
+          </ol>
+
+          <div class="lens-card" data-only="6">
+            <div class="lens-card-head"><i class="b-dot">b.</i> Where boost.ai fits in the scope</div>
+            <ul>
+              <li><b>AI-assisted service</b> is boost.ai's core — AI agents for chat and voice that guide, assist and automate.</li>
+              <li><b>Knowledge base</b> — answers are grounded in S-Bank's approved knowledge, shared with human agents.</li>
+              <li><b>Omnichannel contact center</b> — the AI agent is the first line in chat and voice, with warm handoff into the contact center.</li>
+              <li><b>Case management</b> — integrations let the agent create and update cases instead of just deflecting.</li>
+              <li><b>Work engagement</b> — conversation and intent data inform forecasting; the WEM tool itself stays separate.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SLIDE 3 — DEEP DIVE (three views)
+         A 0–3 reference arch · B 4–7 target arch · C 8–10 why · 11 lens on B
+         ================================================================ -->
+    <section class="slide s-deep" data-steps="12" data-title="Deep dive">
+      <div class="deep-head">
+        <div>
+          <div class="eyebrow">03 · Deep dive</div>
+          <h1 class="title sm">One customer <span class="bar">|</span> One view <span class="bar">|</span> One workflow</h1>
+        </div>
+        <div class="view-tabs">
+          <button class="view-tab" data-goto="0" data-active="0-3"><b>A</b> Today</button>
+          <button class="view-tab" data-goto="4" data-active="4-7,11"><b>B</b> Target</button>
+          <button class="view-tab" data-goto="8" data-active="8-10"><b>C</b> Why change</button>
+        </div>
+      </div>
+
+      <div class="deep-stage">
+
+        <!-- ---------------- VIEW A: Reference architecture ---------------- -->
+        <div class="view view-a" data-only="0-3" data-zoom="S-Bank reference architecture">
+          <div class="ra-grid">
+            <div class="ra-layers">
+              <div class="ra-layer l1 f" data-focus="1"><b>I</b><span>Channels &amp; customer service</span></div>
+              <div class="ra-layer l2 f" data-focus="2"><b>II</b><span>Process automation &amp; integration</span></div>
+              <div class="ra-layer l3 f" data-focus="3"><b>III</b><span>Data, products &amp; infrastructure</span></div>
+            </div>
+
+            <div class="ra-main">
+              <div class="ra-channels f" data-zoom="Channels and customer services">
+                <div class="ra-caption">Channels and customer services</div>
+                <div class="ra-ch-grid">
+                  <div class="ra-dashed ra-sgroup f" data-focus="1">
+                    <div class="ra-dash-title">S-Group ecosystem</div>
+                    <div class="chain-chips"><span>S-market</span><span>Prisma</span><span>Alepa</span><span>Sale</span><span>ABC</span><span>…</span></div>
+                    <p>Retail, fuel, travel &amp; hospitality touchpoints of S-Group's co-op members.</p>
+                  </div>
+
+                  <div class="ra-centre">
+                    <div class="ra-icons f" data-focus="1">
+                      <div><svg><use href="#i-mobile"/></svg>S-Mobile</div>
+                      <div><svg><use href="#i-chat"/></svg>Chat, online meetings</div>
+                      <div><svg><use href="#i-monitor"/></svg>Netbank &amp; S-Pankki.fi</div>
+                      <div><svg><use href="#i-team"/></svg>Back-end teams &amp; customer mgmt.</div>
+                      <div><svg><use href="#i-store"/></svg>Customer service</div>
+                      <div><svg><use href="#i-call"/></svg>Call center</div>
+                    </div>
+                    <div class="ra-platforms f" data-focus="1">
+                      <div class="pl wide">Digital Service Platform</div>
+                      <div class="pl wide">Customer Servicing UIs</div>
+                      <div class="pl">Contact Center</div>
+                    </div>
+                    <div class="ra-pa f" data-focus="2">Process Automation and Agentic AI</div>
+                  </div>
+
+                  <div class="ra-dashed ra-partner f" data-focus="1">
+                    <div class="ra-dash-title">Partner ecosystem</div>
+                    <ul><li>Value-add services, insurance etc.</li><li>Authorities, other financial institutions</li><li>IT suppliers</li></ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ra-integr f" data-focus="2"><b>Integrations</b>&nbsp;(APIs, MCPs and data integrations)</div>
+
+              <div class="ra-bottom f" data-focus="3">
+                <div class="ra-sgcs">S-Group Common Services</div>
+                <div class="ra-prod-col">
+                  <div class="ra-products">
+                    <div>Core Banking Platform</div>
+                    <div>Wealth Management Platform</div>
+                    <div>Data Platform</div>
+                    <div>AI Platform</div>
+                  </div>
+                  <div class="ra-infra">Common Infrastructure Services</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ra-cyber"><span>Cybersecurity</span></div>
+          </div>
+        </div>
+
+        <!-- ---------------- VIEW B: Target architecture ---------------- -->
+        <div class="view view-b" data-only="4-7,11" data-zoom="Target architecture">
+          <div class="ta-grid">
+            <div class="ta-rows">
+              <div class="ta-row f" data-focus="5">
+                <div class="ta-label">Channels</div>
+                <div class="ta-body ta-channels">
+                  <span><svg><use href="#i-mobile"/></svg>S-mobile<i class="lens-tag" data-show="11">AI agent</i></span>
+                  <span><svg><use href="#i-monitor"/></svg>Netbank &amp; secure messages</span>
+                  <span><svg><use href="#i-chat"/></svg>Chat<i class="lens-tag" data-show="11">AI agent</i></span>
+                  <span><svg><use href="#i-user"/></svg>Voice / phone<i class="lens-tag" data-show="11">Voice agent</i></span>
+                  <span><svg><use href="#i-bank"/></svg>Physical branches</span>
+                  <span><svg><use href="#i-dots"/></svg>Others</span>
+                </div>
+              </div>
+
+              <div class="ta-row f" data-focus="5" data-zoom="Common customer view">
+                <div class="ta-label">One view<small>Asra scope</small></div>
+                <div class="ta-body ta-view">
+                  <div class="ta-view-head"><svg><use href="#i-eye"/></svg><div><b>Common customer view</b><span>A real-time situational overview of all customer-related matters, regardless of channel or owner.</span></div></div>
+                  <div class="ta-view-items">
+                    <span><svg><use href="#i-clock"/></svg>Shared interaction history</span>
+                    <span><svg><use href="#i-list"/></svg>Open &amp; planned activities</span>
+                    <span><svg><use href="#i-idcard"/></svg>Customer &amp; event info</span>
+                    <span><svg><use href="#i-people"/></svg>Ownership &amp; responsibilities</span>
+                    <span><svg><use href="#i-doc"/></svg>Document &amp; message visibility</span>
+                  </div>
+                  <i class="lens-tag" data-show="11">Reads &amp; writes context</i>
+                </div>
+              </div>
+
+              <div class="ta-row ta-row-asra f" data-focus="6" data-zoom="ASRA layer">
+                <div class="ta-label dark">ASRA layer<small>Solution enabler · Asra scope</small></div>
+                <div class="ta-body ta-asra">
+                  <div class="ta-asra-head"><svg><use href="#i-brain"/></svg><b>AI-agents and automation</b><span>Guide</span><span>Assist</span><span>Automate</span>
+                    <i class="lens-tag core" data-show="11">boost.ai core</i></div>
+                  <div class="ta-mods">
+                    <div class="ta-mod"><svg><use href="#i-user"/></svg><b>Omnichannel customer service</b><p>Voice, chat, email and messaging channels. Routing, queue management, recording and agent desktop.</p><i class="lens-tag" data-show="11">Warm handoff</i></div>
+                    <div class="ta-mod"><svg><use href="#i-people"/></svg><b>Workforce planning &amp; development</b><p>Scheduling, demand forecasting, quality, performance management and coaching.</p></div>
+                    <div class="ta-mod hot"><svg><use href="#i-robot"/></svg><b>Automation and AI</b><p>Self-service, AI assistants and voice bots. Leveraging the bank's common AI platform.</p><i class="lens-tag core" data-show="11">boost.ai</i></div>
+                    <div class="ta-mod"><svg><use href="#i-flow"/></svg><b>Case management &amp; orchestration</b><p>Case status, SLA management, routing, auditing and traceability.</p><i class="lens-tag" data-show="11">Creates cases</i></div>
+                    <div class="ta-mod"><svg><use href="#i-db"/></svg><b>Knowledge base</b><p>Creation, maintenance and retrieval — for representatives, agents, bots and channels.</p><i class="lens-tag" data-show="11">Grounds answers</i></div>
+                  </div>
+                  <div class="ta-asra-foot"><svg><use href="#i-shield"/></svg><b>Security and governance</b> Identity &amp; access management · Data protection · Auditing · Monitoring &amp; reporting</div>
+                </div>
+              </div>
+
+              <div class="ta-row f" data-focus="7">
+                <div class="ta-label mid">Integrations</div>
+                <div class="ta-body ta-integr"><svg><use href="#i-cloud"/></svg><b>Integration and service layer</b><span>ASRA consumes and produces data through this layer — connecting services, processes and data into a unified customer experience.</span><em>APIs · Customer context · AI services · Microservices</em>
+                  <i class="lens-tag" data-show="11">APIs · MCP</i></div>
+              </div>
+
+              <div class="ta-row f" data-focus="7">
+                <div class="ta-label">Core systems</div>
+                <div class="ta-body ta-core">
+                  <span><svg><use href="#i-user"/></svg>Customer data (CRM)</span>
+                  <span><svg><use href="#i-coins"/></svg>Accounts &amp; payments</span>
+                  <span><svg><use href="#i-card"/></svg>Cards</span>
+                  <span><svg><use href="#i-lend"/></svg>Lending</span>
+                  <span><svg><use href="#i-piggy"/></svg>Wealth &amp; asset mgmt.</span>
+                  <span><svg><use href="#i-doc"/></svg>Document mgmt.</span>
+                </div>
+              </div>
+
+              <div class="ta-row f" data-focus="7">
+                <div class="ta-label">Cross-cutting</div>
+                <div class="ta-body ta-cross"><b>Bank-wide capabilities</b> Identity &amp; access management · Auditing &amp; security · Event backbone · Data platform</div>
+              </div>
+            </div>
+
+            <aside class="ta-principles">
+              <h4>Principles</h4>
+              <ul>
+                <li>Customer first</li>
+                <li>Single source of truth</li>
+                <li>Automated and intelligent</li>
+                <li>Secure and responsible</li>
+                <li>Scalable</li>
+              </ul>
+            </aside>
+          </div>
+        </div>
+
+        <!-- ---------------- VIEW C: Challenges → solution → benefits ---------------- -->
+        <div class="view view-c" data-only="8-10" data-zoom="Challenges, solution and benefits">
+          <div class="cs-grid">
+            <div class="cs-col cs-chal f" data-focus="8" data-zoom="Challenges">
+              <h3>Challenges</h3>
+              <div class="cs-card"><svg><use href="#i-team"/></svg><div><b>Customer</b><ul><li>Needs to repeat their issue across channels</li><li>Limited visibility into how a case is progressing</li><li>Service insufficiently tailored to the customer's situation</li></ul></div></div>
+              <div class="cs-card"><svg><use href="#i-wrench"/></svg><div><b>Work</b><ul><li>Work is organised around steps, not the customer's end-to-end case</li><li>Customer view is fragmented by product and channel</li><li>Work and cases are inconsistently prioritised</li></ul></div></div>
+              <div class="cs-card"><svg><use href="#i-chart"/></svg><div><b>Management</b><ul><li>Channels are managed largely in isolation</li><li>Limited scalability of the operating model across channels</li></ul></div></div>
+            </div>
+
+            <div class="cs-col cs-sol f" data-show="9" data-focus="9" data-zoom="Solution">
+              <h3>Solution</h3>
+              <div class="cs-sol-box">
+                <div class="cs-sol-item"><svg><use href="#i-eye"/></svg><div><b>One view of the customer</b><p>Full customer relationship, status and history are visible in all channels.</p></div></div>
+                <div class="cs-sol-arrow"></div>
+                <div class="cs-sol-item"><svg><use href="#i-expert"/></svg><div><b>One pool of experts <small>(phased)</small></b><p>Channel boundaries are removed, and expertise is allocated based on demand and skills.</p></div></div>
+                <div class="cs-sol-arrow"></div>
+                <div class="cs-sol-item"><svg><use href="#i-gear"/></svg><div><b>One process orchestration</b><p>Work is prioritised by context and potential. Ownership and history are retained.</p></div></div>
+              </div>
+            </div>
+
+            <div class="cs-col cs-ben f" data-show="10" data-focus="10" data-zoom="Benefits">
+              <h3>Benefits</h3>
+              <div class="cs-card"><svg><use href="#i-user"/></svg><div><b>Customer</b><ul><li>Visible progress</li><li>Service tailored to the situation</li><li>AI-assisted service 24/7</li></ul></div></div>
+              <div class="cs-card"><svg><use href="#i-bolt"/></svg><div><b>Productivity</b><ul><li>Routine tasks are automated</li><li>Faster turnaround</li><li>Skills grow, and work becomes more meaningful</li></ul></div></div>
+              <div class="cs-card"><svg><use href="#i-grow"/></svg><div><b>Growth</b><ul><li>Targeted sales grow overall customer relationships</li><li>The operating model scales</li></ul></div></div>
+            </div>
+          </div>
+          <div class="cs-platform f" data-show="10" data-focus="10">
+            <b>ASRA platform</b>
+            <span><svg><use href="#i-brain"/></svg>AI</span>
+            <span><svg><use href="#i-gear"/></svg>Automation</span>
+            <span><svg><use href="#i-people"/></svg>Resourcing</span>
+            <span><svg><use href="#i-flow"/></svg>Orchestration</span>
+            <span><svg><use href="#i-db"/></svg>Shared data</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- captions -->
+      <div class="captions">
+        <p data-only="0"><b>Today.</b> S-Bank's reference architecture in three layers — channels on top, integrations in the middle, products and platforms underneath. Cybersecurity spans all of it.</p>
+        <p data-only="1"><b>Layer I · Channels &amp; customer service.</b> Many front doors — S-Mobile, chat, netbank, branches, call center — inside the wider S-Group and partner ecosystems.</p>
+        <p data-only="2"><b>Layer II · Process automation &amp; integration.</b> Process automation and agentic AI sit on top of a shared integration layer of APIs, MCPs and data integrations.</p>
+        <p data-only="3"><b>Layer III · Data, products &amp; infrastructure.</b> Core banking, wealth management, the data platform and the bank's common AI platform — plus S-Group common services.</p>
+        <p data-only="4"><b>Target.</b> From channel-specific interactions to a shared customer view and workflow. ASRA is the solution-enabling layer between channels and core systems.</p>
+        <p data-only="5"><b>One view.</b> Every channel reads from the same common customer view — interaction history, open activities, events, ownership and documents.</p>
+        <p data-only="6"><b>The ASRA layer.</b> AI agents and automation that guide, assist and automate across five modules, governed by one security and governance model.</p>
+        <p data-only="7"><b>Integrations &amp; core.</b> ASRA consumes and produces data through the integration and service layer, on top of the core systems and bank-wide capabilities.</p>
+        <p data-only="8"><b>Why change.</b> Customers repeat themselves, work is organised around steps rather than cases, and channels are managed in isolation.</p>
+        <p data-only="9"><b>The answer.</b> One view of the customer, one pool of experts (phased) and one process orchestration — so the case progresses seamlessly across channels.</p>
+        <p data-only="10"><b>The payoff.</b> Visible progress for customers, automated routine work for employees, and an operating model that scales — on one ASRA platform.</p>
+        <p data-only="11" class="lens-cap"><i class="b-dot">b.</i> <b>Where boost.ai fits.</b> AI agents in chat and voice, grounded in the knowledge base, acting through the integration layer — and handing over to humans inside the same case.</p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SLIDE 4 — MATURITY JOURNEY
+         steps: 0 goals · 1 manual · 2 basic + now · 3 self-service + headed + bar · 4 proactive · 5 rich · 6 lens
+         ================================================================ -->
+    <section class="slide s-mat" data-steps="7" data-title="Maturity">
+      <div class="eyebrow">04 · Maturity journey</div>
+      <h1 class="title">A phased transition starts from ASRA<br/>to enable an AI-enriched service model</h1>
+
+      <div class="mat-grid">
+        <div class="mat-goals f" data-focus="0" data-zoom="Key goals">
+          <h3>Our key goals</h3>
+          <ol>
+            <li>AI enriches every service journey</li>
+            <li>Greater customer value, speed and transparency through AI and digitalization</li>
+            <li>Automation of routine customer queries</li>
+            <li>Efficiency gains in operational services</li>
+            <li>Gradual channel shift toward digital service</li>
+          </ol>
+        </div>
+
+        <div class="mat-stairs" data-zoom="Maturity journey">
+          <div class="mat-headed" data-show="3"><span class="chev"></span>Where we are headed</div>
+
+          <div class="stairs">
+            <div class="stair st1 f" data-show="1" data-focus="1">
+              <b>Manual service</b><p>Personal service, paper-based processes.</p>
+            </div>
+            <div class="stair st2 f" data-show="2" data-focus="2">
+              <b>Basic digitalization</b><p>Digital channels opened, back-office processes automated. AI pilots underway.</p>
+            </div>
+            <div class="stair st3 f" data-show="3" data-focus="3">
+              <b>Digital self-service</b><p>Self-service is the primary channel. End-to-end automation in core processes. AI in standard use.</p><em>Increased self-service rate</em>
+            </div>
+            <div class="stair st4 f" data-show="4" data-focus="4">
+              <b>Proactive AI</b><p>Agentic AI handles routines autonomously and anticipates needs. Humans as escalation.</p><em>More autonomous resolutions and shorter overall resolution times</em>
+            </div>
+            <div class="stair st5 f" data-show="5" data-focus="5">
+              <b>Rich, personalized digital experience</b><p>AI is the core of the service. Continuous learning, hyper-personalization. Strong increase in business value.</p><em>High share of digital service. Highly targeted, proactive and personalised service</em>
+            </div>
+          </div>
+
+          <div class="mat-under">
+            <div class="mat-now" data-show="2"><span class="tri"></span>Where we stand now</div>
+            <div class="mat-bar" data-show="3">Service costs reduced · Human agent efficiency improved<span class="bar-arrow"></span></div>
+          </div>
+
+          <div class="mat-lens" data-show="6">
+            <div class="ml ml2"><i class="b-dot">b.</i><b>Start here</b> Knowledge-grounded AI agent on existing chat &amp; voice channels.</div>
+            <div class="ml ml3"><i class="b-dot">b.</i><b>Resolve, don't deflect</b> Authenticated, transactional journeys end-to-end. <a href="/demo-2.html">See Demo 2 →</a></div>
+            <div class="ml ml4"><i class="b-dot">b.</i><b>Act on events</b> Suspicious payment → push → outbound call, human as escalation. <a href="/demo-1.html">See Demo 1 →</a></div>
+            <div class="ml ml5"><i class="b-dot">b.</i><b>Learn &amp; personalise</b> Conversation insight and customer context, continuously improved.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="chrome-bottom">
+  <div class="progress" id="progress"></div>
+  <div class="hint"><kbd>←</kbd><kbd>→</kbd> step · <kbd>Z</kbd> zoom · <kbd>F</kbd> fullscreen · <kbd>?</kbd> help</div>
+  <div class="nav-btns">
+    <button class="icon-btn" id="btnPrev" aria-label="Previous step"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <span class="counter" id="counter">01 / 04</span>
+    <button class="icon-btn" id="btnNext" aria-label="Next step"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+</footer>
+
+<!-- Zoom overlay -->
+<div class="zoom" id="zoom" hidden>
+  <div class="zoom-backdrop"></div>
+  <div class="zoom-host" id="zoomHost"></div>
+  <div class="zoom-bar"><span id="zoomTitle"></span><span class="zoom-hint"><kbd>←</kbd><kbd>→</kbd> next item · <kbd>Esc</kbd> close</span></div>
+</div>
+
+<!-- Help overlay -->
+<div class="help" id="help" hidden>
+  <div class="help-card">
+    <h4>Presenting</h4>
+    <dl>
+      <dt><kbd>→</kbd> / <kbd>Space</kbd></dt><dd>Next step, then next slide</dd>
+      <dt><kbd>←</kbd></dt><dd>Back</dd>
+      <dt><kbd>PgDn</kbd> / <kbd>PgUp</kbd></dt><dd>Skip to next / previous slide</dd>
+      <dt><kbd>1</kbd> – <kbd>4</kbd></dt><dd>Jump to slide</dd>
+      <dt><kbd>Z</kbd> or click</dt><dd>Enlarge the highlighted diagram or card</dd>
+      <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>While enlarged: step through the set</dd>
+      <dt><kbd>F</kbd></dt><dd>Fullscreen</dd>
+      <dt><kbd>H</kbd></dt><dd>Back to the demo hub</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Close</dd>
+    </dl>
+  </div>
+</div>
+
+<script type="module" src="/src/asra.js"></script>
+</body>
+</html>
