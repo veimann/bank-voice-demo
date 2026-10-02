@@ -41,7 +41,7 @@
               </div>
             </div>
 
-            <!-- Push notification banner (Day 2 morning) — overlays whatever screen is showing -->
+            <!-- Push notification banner (Day 2 morning) — overlays whatever screen is showing. Short teaser; tap opens the full text. -->
             <div class="ciba-banner" id="d1PushBanner" role="button" tabindex="0" aria-label="Open S-mobiili notification">
               <div class="ciba-icon">S</div>
               <div class="ciba-copy">
@@ -54,12 +54,9 @@
             <div class="phone-screens">
 
               <!-- HOME SCREEN -->
-              <div id="appHome" class="app-home">
+              <div id="appHome" class="app-home pscreen on">
                 <div class="app-topbar">
                   <span class="app-topbar-title">S-mobiili</span>
-                  <button type="button" class="inbox-btn" id="openInboxBtn" aria-label="Messages">
-                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5 12 13l9-6.5"/><rect x="3" y="5" width="18" height="14" rx="2.5"/></svg>
-                  </button>
                 </div>
                 <p class="app-greeting" id="appGreeting">Hei!</p>
                 <div class="balance-card">
@@ -67,16 +64,11 @@
                   <p class="balance-amount">2 418,32 €</p>
                   <p class="balance-sub">&bull;&bull;&bull;&bull; 4471</p>
                 </div>
-                <button type="button" class="fab-chat" id="openChatBtn">
-                  <span class="fab-chat-dot"></span>
-                  Chat with us
-                </button>
               </div>
 
               <!-- INBOX — LIST SCREEN -->
-              <div id="appInboxList" class="app-inbox" hidden>
+              <div id="appInboxList" class="app-inbox pscreen">
                 <div class="screen-header">
-                  <button type="button" class="screen-back" id="inboxBackBtn" aria-label="Back">&larr;</button>
                   <span class="screen-title">Messages</span>
                 </div>
                 <div class="inbox-list">
@@ -94,20 +86,41 @@
               </div>
 
               <!-- INBOX — MESSAGE DETAIL SCREEN -->
-              <div id="appInboxDetail" class="app-inbox-detail" hidden>
+              <div id="appInboxDetail" class="app-inbox-detail pscreen">
                 <div class="screen-header">
                   <button type="button" class="screen-back" id="inboxDetailBackBtn" aria-label="Back">&larr;</button>
                   <span class="screen-title">Online Banking Support</span>
                 </div>
-                <div class="inbox-detail-body">
-                  <p class="sent-meta">Yesterday · 18:32</p>
-                  <p class="sent-bubble">Think I may have been a victim of fraud. I noticed a transaction I don&rsquo;t recognize on my account and I&rsquo;m worried my card or account details may have been compromised. What I should do next?</p>
-                  <p class="sent-status">Sent to S-Pankki</p>
+                <div class="secure-msg">
+                  <div class="secure-msg-meta">
+                    <span class="secure-msg-icon">OB</span>
+                    <span class="secure-msg-meta-text">
+                      <span class="secure-msg-to">To: Online Banking Support</span>
+                      <span class="secure-msg-time">Yesterday · 18:32</span>
+                    </span>
+                    <span class="secure-msg-status">Sent</span>
+                  </div>
+                  <div class="secure-msg-body">
+                    <p>Think I may have been a victim of fraud. I noticed a transaction I don&rsquo;t recognize on my account and I&rsquo;m worried my card or account details may have been compromised. What I should do next?</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PUSH NOTIFICATION — DETAIL SCREEN (Day 2 morning) -->
+              <div id="d1NotifDetail" class="app-notif-detail pscreen">
+                <div class="screen-header">
+                  <button type="button" class="screen-back" id="notifDetailBackBtn" aria-label="Back">&larr;</button>
+                  <span class="screen-title">Notification</span>
+                </div>
+                <div class="notif-detail-body">
+                  <div class="notif-detail-icon">S</div>
+                  <p class="notif-detail-time">S-mobiili · now</p>
+                  <p class="notif-detail-text" id="d1NotifBody">Your new card has been ordered and is on its way.</p>
                 </div>
               </div>
 
               <!-- INCOMING CALL — RINGING SCREEN (Day 2) -->
-              <div id="d1Ring" class="d1-ring" hidden>
+              <div id="d1Ring" class="d1-ring pscreen">
                 <div class="d1-ring-pulse">
                   <span></span><span></span><span></span>
                   <div class="d1-ring-core">S</div>
@@ -125,7 +138,7 @@
               </div>
 
               <!-- IN-CALL SCREEN (Day 2) -->
-              <div id="d1InCall" class="call-view" hidden>
+              <div id="d1InCall" class="call-view pscreen">
                 <div class="call-avatar">S</div>
                 <div class="call-name">S-Pankki</div>
                 <div class="call-sub" id="d1CallSub">Connecting…</div>
@@ -143,6 +156,23 @@
               </div>
 
             </div>
+
+            <!-- BOTTOM NAV — Home / Messages / Chat -->
+            <nav class="bottom-nav" id="bottomNav">
+              <button type="button" class="nav-item on" id="navHomeBtn" aria-label="Home">
+                <span class="nav-item-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/></svg></span>
+                <span class="nav-item-label">Home</span>
+              </button>
+              <button type="button" class="nav-item" id="navMessagesBtn" aria-label="Messages">
+                <span class="nav-item-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5 12 13l9-6.5"/><rect x="3" y="5" width="18" height="14" rx="2.5"/></svg></span>
+                <span class="nav-item-label">Messages</span>
+              </button>
+              <button type="button" class="nav-item" id="navChatBtn" aria-label="Chat with us">
+                <span class="nav-item-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.8 8.8 0 0 1-3.1-.6L3 21l1.8-5.4A8.4 8.4 0 0 1 12.1 3a8.4 8.4 0 0 1 8.9 8.5Z"/></svg></span>
+                <span class="nav-item-label">Chat</span>
+              </button>
+            </nav>
+
           </div>
         </div>
       </section>
@@ -155,7 +185,7 @@
 
         <div class="side-placeholder" id="sidePlaceholder">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.8 8.8 0 0 1-3.1-.6L3 21l1.8-5.4A8.4 8.4 0 0 1 12.1 3a8.4 8.4 0 0 1 8.9 8.5Z"/></svg>
-          <p>Open &ldquo;Chat with us&rdquo; on the phone, or answer an incoming call, to see the conversation here.</p>
+          <p>Tap &ldquo;Chat&rdquo; on the phone, or answer an incoming call, to see the conversation here.</p>
         </div>
 
         <!-- Live chat (Day 1) -->
@@ -165,11 +195,11 @@
               <span class="chat-header-name">Aulis</span>
               <span class="chat-header-status"><span class="chat-online-dot"></span> AI Assistant</span>
             </div>
-            <button type="button" class="chat-close" id="sideChatCloseBtn" aria-label="Minimize chat">&times;</button>
+            <button type="button" class="chat-end-btn" id="sideChatEndBtn">End chat</button>
           </div>
           <div class="chat-body" id="chatBody"></div>
           <form class="chat-input-bar" id="chatForm">
-            <input type="text" id="chatInput" placeholder="Type a message…" autocomplete="off" />
+            <textarea id="chatInput" rows="1" placeholder="Type a message…" autocomplete="off" enterkeyhint="send"></textarea>
             <button type="submit" id="chatSendBtn" class="chat-send-btn" aria-label="Send">&rarr;</button>
           </form>
         </div>

@@ -7,7 +7,7 @@
    ========================================================================= */
 import { applyStoredPersonaIfAny } from './persona.js';
 import { getCustomers } from './data/customers.js';
-import { initChatPanel } from './ui/chatPanel.js';
+import { initChatPanel, clearChatBody } from './ui/chatPanel.js';
 import { resetConversation } from './integrations/chatApi.js';
 import * as phoneUI from './ui/phoneDemo1.js';
 import * as sidePanel from './ui/sidePanel.js';
@@ -23,10 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initPhoneAndPanel();
 
   initPresenterDemo1({
-    onReset: async () => {
-      chatStarted = false;
-      resetConversation();
-    }
+    onReset: async () => endChat()
   });
 });
 
@@ -37,20 +34,34 @@ function initPhoneAndPanel() {
     onDeclineCall: () => { /* ringing screen already dismissed by phoneDemo1.js */ },
     onEndCall: () => livekitDemo1.endDay2Call(),
     onToggleMute: () => livekitDemo1.toggleMicMute(),
-    onPushBannerTap: () => { /* dismissing the banner is enough — no action needed from the customer */ }
+    onPushBannerTap: () => { /* the notification's own detail screen is enough — no action needed from the customer */ }
   });
 
-  sidePanel.initSidePanel({
-    onCloseChat: () => { /* conversation state persists; reopening "Chat with us" resumes it */ }
-  });
+  sidePanel.initSidePanel();
+
+  const endChatBtn = document.getElementById('sideChatEndBtn');
+  if (endChatBtn) endChatBtn.addEventListener('click', endChat);
 }
 
 function openChat() {
   sidePanel.showChat();
+  phoneUI.setChatNavActive(true);
   if (!chatStarted) {
     chatStarted = true;
     initChatPanel();
   }
+}
+
+/* Ends the live conversation outright (not just hiding the panel) so the
+   next "Chat" tap is guaranteed to START a brand-new conversation instead of
+   silently RESUMING whatever was last stored — that resume-replay is what
+   made the welcome message look doubled-up during rehearsal. */
+function endChat() {
+  chatStarted = false;
+  resetConversation();
+  clearChatBody();
+  sidePanel.showPlaceholder();
+  phoneUI.setChatNavActive(false);
 }
 
 async function setGreeting() {

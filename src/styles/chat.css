@@ -38,34 +38,43 @@
   .side-panel { width: 100%; max-width: 420px; }
 }
 
-/* Screens live below the status bar, each one a flex column filling the
-   rest of the phone. Exactly one is visible at a time (toggled via the
-   native `hidden` attribute by ui/phoneDemo1.js). */
+/* Screens live below the status bar, each one absolutely stacked and
+   crossfaded via the .on class (ui/phoneDemo1.js toggles it) — a native
+   app's screen transition, rather than a flat hidden-attribute swap. */
 .phone-screens {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
   position: relative;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.phone-screens > * {
-  flex: 1;
+.pscreen {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.pscreen.on {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
 }
 
 /* ---- Home screen ---- */
 .app-home {
   padding: 10px 20px 20px;
-  position: relative;
 }
 
 .app-topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .app-topbar-title {
@@ -74,20 +83,6 @@
   color: var(--sp-green-dark);
   letter-spacing: -0.01em;
 }
-
-.inbox-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: var(--sp-gray-100);
-  color: var(--sp-ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.inbox-btn:hover { background: var(--sp-gray-200); }
 
 .app-greeting {
   margin: 14px 0 16px;
@@ -108,35 +103,47 @@
 .balance-amount { margin: 0 0 8px; font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
 .balance-sub { margin: 0; font-size: 12px; opacity: 0.8; }
 
-.fab-chat {
-  position: absolute;
-  right: 20px;
-  bottom: 26px;
-  display: inline-flex;
+/* ---- Bottom nav (Home / Messages / Chat) ---- */
+.bottom-nav {
+  flex: none;
+  display: flex;
+  background: #fff;
+  border-top: 1px solid var(--sp-gray-200);
+  padding: 7px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+  position: relative;
+  z-index: 10;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  background: var(--sp-ink);
-  color: #fff;
+  gap: 2px;
+  background: none;
   border: none;
-  padding: 12px 18px;
-  border-radius: 999px;
   font-family: inherit;
-  font-size: 13px;
-  font-weight: 700;
+  color: var(--sp-gray-400);
   cursor: pointer;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  padding: 3px 0;
 }
 
-.fab-chat:hover { transform: translateY(-1px); }
-
-.fab-chat-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--sp-green);
-  box-shadow: 0 0 0 0 rgba(0, 170, 70, 0.5);
-  animation: liveDot 1.6s infinite;
+.nav-item-pill {
+  width: 50px;
+  height: 27px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
 }
+
+.nav-item-pill svg { width: 20px; height: 20px; }
+
+.nav-item-label { font-size: 10.5px; font-weight: 600; }
+
+.nav-item.on { color: var(--sp-green-dark); }
+.nav-item.on .nav-item-pill { background: var(--sp-green-light); }
 
 /* ---- Shared sub-screen header (inbox list + inbox detail) ---- */
 .screen-header {
@@ -212,40 +219,114 @@
   text-overflow: ellipsis;
 }
 
-/* ---- Inbox: message detail ---- */
-.inbox-detail-body {
+/* ---- Inbox: message detail ----
+   A secure-message / contact-the-bank thread, not an SMS bubble: a card with
+   a sender/recipient row, timestamp and status, then the message body as
+   plain reading text — this is what "online messaging inside a banking app"
+   reads as, as opposed to a green iMessage-style chat bubble. */
+.secure-msg {
+  margin: 16px;
+  background: var(--sp-white);
+  border: 1px solid var(--sp-gray-200);
+  border-radius: 14px;
+  overflow: hidden;
+  flex: none;
+}
+
+.secure-msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--sp-gray-100);
+  border-bottom: 1px solid var(--sp-gray-200);
+}
+
+.secure-msg-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--sp-green-light);
+  color: var(--sp-green-dark);
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.secure-msg-meta-text {
   flex: 1;
-  overflow-y: auto;
-  padding: 18px 16px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  gap: 2px;
 }
 
-.sent-meta {
-  width: 100%;
-  margin: 0 0 8px;
-  font-size: 11px;
-  color: var(--sp-gray-400);
+.secure-msg-to { font-size: 12.5px; font-weight: 700; }
+.secure-msg-time { font-size: 11px; color: var(--sp-gray-400); }
+
+.secure-msg-status {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--sp-green-dark);
+  background: var(--sp-green-light);
+  padding: 4px 9px;
+  border-radius: 999px;
+  flex: none;
+}
+
+.secure-msg-body {
+  padding: 15px 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--sp-ink);
+}
+
+.secure-msg-body p { margin: 0; }
+
+/* Both of these hold presenter-editable / variable-length text — let them
+   scroll internally rather than clip, just in case. */
+.app-inbox-detail,
+.app-notif-detail {
+  overflow-y: auto;
+}
+
+/* ---- Push notification — detail screen ---- */
+.notif-detail-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  gap: 8px;
+  padding: 34px 26px;
 }
 
-.sent-bubble {
-  margin: 0;
-  max-width: 85%;
+.notif-detail-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
   background: var(--sp-green);
   color: #fff;
-  padding: 11px 15px;
-  border-radius: 16px;
-  border-bottom-right-radius: 4px;
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-weight: 800;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
 }
 
-.sent-status {
-  margin: 6px 4px 0 0;
-  font-size: 11px;
-  color: var(--sp-gray-400);
+.notif-detail-time { font-size: 11.5px; color: var(--sp-gray-400); }
+
+.notif-detail-text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--sp-ink);
+  max-width: 250px;
 }
 
 /* ---- Incoming call — ringing screen (Day 2) ---- */
@@ -370,16 +451,20 @@
   background: var(--sp-green);
 }
 
-.chat-close {
+.chat-end-btn {
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sp-red);
   background: none;
-  border: none;
-  font-size: 20px;
-  line-height: 1;
-  color: var(--sp-gray-400);
+  border: 1px solid var(--sp-gray-200);
+  border-radius: 999px;
+  padding: 6px 12px;
   cursor: pointer;
-  padding: 4px 6px;
+  flex: none;
+  white-space: nowrap;
 }
-.chat-close:hover { color: var(--sp-ink); }
+.chat-end-btn:hover { background: #fdeceb; border-color: var(--sp-red); }
 
 .chat-body {
   flex: 1;
@@ -388,13 +473,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-}
-
-.chat-loading {
-  font-size: 12px;
-  color: var(--sp-gray-700);
-  text-align: center;
-  margin-top: 20px;
 }
 
 .chat-msg { display: flex; flex-direction: column; gap: 6px; }
@@ -429,6 +507,30 @@
 .chat-bubble--muted { color: var(--sp-gray-400); font-style: italic; }
 .chat-bubble--error { background: #fdeceb; color: var(--sp-red); }
 
+/* ---- Typing indicator — shown while waiting on any bot reply ---- */
+.chat-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+}
+
+.chat-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sp-gray-400);
+  animation: chatTypingBlink 1.3s infinite;
+}
+
+.chat-typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes chatTypingBlink {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
 .chat-links {
   display: flex;
   flex-direction: column;
@@ -460,25 +562,30 @@
 .chat-input-bar {
   flex: none;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
   padding: 10px 2px 2px;
   border-top: 1px solid var(--sp-gray-200);
 }
 
-.chat-input-bar input {
+.chat-input-bar textarea {
   flex: 1;
   border: 1px solid var(--sp-gray-200);
   background: var(--sp-gray-100);
-  border-radius: 999px;
+  border-radius: 20px;
   padding: 10px 14px;
   font-family: inherit;
   font-size: 13.5px;
+  line-height: 1.4;
   color: var(--sp-ink);
+  resize: none;
+  min-height: 40px;
+  max-height: 120px;
+  overflow-y: auto;
 }
 
-.chat-input-bar input:focus { outline: none; border-color: var(--sp-green); }
-.chat-input-bar input:disabled { opacity: 0.6; }
+.chat-input-bar textarea:focus { outline: none; border-color: var(--sp-green); }
+.chat-input-bar textarea:disabled { opacity: 0.6; }
 
 .chat-send-btn {
   width: 38px;

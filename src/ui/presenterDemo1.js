@@ -75,7 +75,7 @@ function getCallbackTime() {
 
 function triggerPushNotification() {
   const time = getCallbackTime();
-  phoneUI.showPushNotification(`Your new card is on its way. We'll call you at ${time} as agreed.`);
+  phoneUI.showPushNotification(`Your new card has been ordered and is on its way. We'll call you at approximately ${time}, as agreed.`);
   setStatus('Push notification shown.');
 }
 

@@ -2,20 +2,14 @@
    SIDE PANEL (Demo 1) — the area to the right of the phone.
    One panel, three mutually-exclusive sub-views: an idle placeholder, the
    live Day-1 chat, and the live Day-2 call transcript. The phone itself
-   never shows the conversation text — clicking "Chat with us" or answering
-   the incoming call opens the matching view here instead.
+   never shows the conversation text — tapping "Chat" on the bottom nav or
+   answering the incoming call opens the matching view here instead. Ending
+   the chat outright (as opposed to just switching views) is owned by
+   main-demo1.js, which wires the "End chat" button itself — it needs to
+   coordinate with chatApi.js's stored conversation id, which this module
+   deliberately knows nothing about.
    ========================================================================= */
-let onCloseChat = null;
-
-export function initSidePanel(handlers) {
-  onCloseChat = (handlers && handlers.onCloseChat) || null;
-  const closeBtn = document.getElementById('sideChatCloseBtn');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      showPlaceholder();
-      if (onCloseChat) onCloseChat();
-    });
-  }
+export function initSidePanel() {
   showPlaceholder();
 }
 

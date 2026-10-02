@@ -72,21 +72,28 @@ for everything below), or use the hotkeys directly:
 
 ### 2a. Demo 1 hotkeys
 
-Open `demo-1.html`. Click **Chat with us** on the phone to start the real,
-live Day-1 chat (opens in the side panel) — everything else is a hidden
-presenter hotkey, same Shift+P convention as above:
+Open `demo-1.html`. The phone has its own bottom nav — **Home**, **Messages**,
+**Chat** — tap **Chat** to start the real, live Day-1 chat (opens in the side
+panel). Everything else is a hidden presenter hotkey, same Shift+P
+convention as above:
 
 | Hotkey | Action |
 |---|---|
 | `Shift+P` | Show/hide the presenter panel (also has a "Callback time" field used in the push notification text, and buttons for everything below) |
-| `Shift+N` | Push the Day-2-morning notification ("Your new card is on its way. We'll call you at [time] as agreed.") |
-| `Shift+C` | Ring the phone with the Day-2 incoming call. Tapping **Answer** on screen places the real outbound LiveKit call and opens its live transcript in the side panel; **Decline** just dismisses the ring |
-| `Shift+R` | Full reset: ends any active call, hides the notification/ring, returns the phone to the home screen, closes the side panel, and resets the chat conversation so reopening it starts fresh |
+| `Shift+N` | Push the Day-2-morning notification (a short teaser banner — tapping it opens the full text: new card ordered and on its way, approximate callback time) |
+| `Shift+C` | Ring the phone with the Day-2 incoming call (plays a short ringtone). Tapping **Answer** on screen places the real outbound LiveKit call and opens its live transcript in the side panel; **Decline** just dismisses the ring |
+| `Shift+R` | Full reset: ends any active call, hides the notification/ring, returns the phone to the home screen, closes the side panel, and ends the chat conversation so reopening it starts fresh |
 
-The inbox (mail icon on the phone's home screen) always has the
-prerequisite message in it — that one doesn't need a hotkey, it's meant to
-already be there before Day 2 starts. Full automation (auto-advancing the
-Day-2 beats on a timer instead of a hotkey) is intentionally not built yet.
+The inbox (**Messages** tab) always has the prerequisite message in it —
+styled as an in-app secure message, not a text message — that one doesn't
+need a hotkey, it's meant to already be there before Day 2 starts.
+
+**End chat**, in the chat panel's own header, ends the live conversation
+outright (not just hiding the panel) — useful during rehearsal, since
+reopening "Chat" after a RESUME would otherwise replay whatever was said in
+the previous run rather than a fresh welcome. Full automation (auto-advancing
+the Day-2 beats on a timer instead of a hotkey) is intentionally not built
+yet.
 
 ## 3. Supabase (optional, recommended before the real demo)
 
