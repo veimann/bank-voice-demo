@@ -209,7 +209,8 @@ html, body {
 }
 
 .presenter-panel select,
-.presenter-panel button {
+.presenter-panel button,
+.presenter-panel input[type="text"] {
   width: 100%;
   padding: 9px 10px;
   border-radius: 8px;
@@ -220,6 +221,9 @@ html, body {
   font-family: inherit;
   cursor: pointer;
 }
+
+.presenter-panel input[type="text"] { cursor: text; }
+.presenter-panel input[type="text"]:focus { outline: none; border-color: #5fe3a0; }
 
 .presenter-panel button:hover { background: rgba(255, 255, 255, 0.15); }
 

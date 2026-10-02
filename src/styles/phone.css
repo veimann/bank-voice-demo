@@ -1,23 +1,43 @@
+/* ---- Modern phone chrome ----
+   Slimmer bezel + a small centered "dynamic island" pill rather than a wide
+   notch, a brushed two-tone frame, and a hairline highlight along the top
+   edge for a current-gen (not old-notch-era) feel. Footprint stays exactly
+   300x620 so this never disturbs demo-2's layout math. */
 .phone {
   width: 300px;
   height: 620px;
-  background: linear-gradient(160deg, #202023, #0b0b0c);
-  border-radius: 52px;
-  padding: 14px;
-  box-shadow: var(--shadow-soft), 0 0 0 2px rgba(0, 0, 0, 0.04);
+  background: linear-gradient(160deg, #46474d 0%, #202124 38%, #0a0a0b 100%);
+  border-radius: 44px;
+  padding: 9px;
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 0 0 2px rgba(0, 0, 0, 0.45);
   position: relative;
   flex: none;
 }
 
+.phone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 44px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 32%);
+  opacity: 0.5;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
 .phone-island {
   position: absolute;
-  top: 14px;
+  top: 15px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90px;
-  height: 26px;
-  background: #0b0b0c;
-  border-radius: 16px;
+  width: 68px;
+  height: 19px;
+  background: #050506;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   z-index: 5;
 }
 
@@ -26,7 +46,7 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, #ffffff, #fbfcfb);
-  border-radius: 38px;
+  border-radius: 36px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -219,7 +239,7 @@
   pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 30;
-  border-radius: 38px;
+  border-radius: 36px;
 }
 
 .faceid-overlay.show { opacity: 1; pointer-events: auto; }

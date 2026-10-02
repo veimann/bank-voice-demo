@@ -7,10 +7,17 @@ This project is growing into a small multi-page demo hub:
   microsite: a live WebRTC call with the boost.ai voice agent (Finnish by
   default), a live transcript, a CIBA-style in-call authentication moment, a
   customer information panel, and a Genesys-style human-handoff view.
-- Part 1 (card dispute: chat → push notification → outbound call) — in
-  progress, not yet in this repo. Its boost.ai voice entry point for the Day-2
-  outbound call: client `SPANKKIRFP`, same session URL as Part 2, external id
-  `24785a28-7bfd-4bfd-825a-7af57d5564fc`.
+- `demo-1.html` — **Part 1: The payment that wasn't hers** (live). A card
+  dispute across two days: a live Day-1-evening chat with the real virtual
+  agent (boost.ai Chat API v2, opens in the side panel next to the phone, not
+  the embeddable widget — full visual control), an inbox screen on the phone
+  holding the prerequisite "I think I've been a victim of fraud" message sent
+  the evening before, a Day-2-morning push notification ("your new card is on
+  its way"), and a Day-2 outbound call — the phone rings, answering it places
+  a real outbound LiveKit call (client `SPANKKIRFP`, same session URL as Part
+  2, external id `24785a28-7bfd-4bfd-825a-7af57d5564fc`) with its own live
+  transcript in the side panel. Every Day-2 beat (push notification, incoming
+  call) is a manual presenter hotkey for this version — see the table below.
 - `asra.html` — **ASRA Ecosystem Visualization** (live). A 4-slide, keyboard
   step-through of S-Pankki's ASRA RFP material (productivity drivers, scope,
   reference/target architecture deep dive, maturity journey), each slide
@@ -32,8 +39,8 @@ This project is growing into a small multi-page demo hub:
 Spoken conversation is Finnish throughout. Every label, button and message in
 the interface itself is in English, as requested.
 
-The rest of this README currently documents **Part 2** specifically
-(`demo-2.html` and its `src/` code).
+The rest of this README mostly documents **Part 2** (`demo-2.html` and its
+`src/` code) — section 2a above covers Part 1's hotkeys specifically.
 
 ## 1. Prerequisites
 
@@ -62,6 +69,24 @@ for everything below), or use the hotkeys directly:
 | `Shift+A` | Trigger authentication (press once to show the phone notification, press again — or click the notification on screen — to run Face ID and unlock the customer panel) |
 | `Shift+E` | Start the hidden English test call (for your own testing only — the visible button always calls Finnish) |
 | `Shift+R` | Full reset: ends the call, stops the mic, clears the transcript, resets authentication and the customer panel, and returns to the Finnish idle state — no page reload needed |
+
+### 2a. Demo 1 hotkeys
+
+Open `demo-1.html`. Click **Chat with us** on the phone to start the real,
+live Day-1 chat (opens in the side panel) — everything else is a hidden
+presenter hotkey, same Shift+P convention as above:
+
+| Hotkey | Action |
+|---|---|
+| `Shift+P` | Show/hide the presenter panel (also has a "Callback time" field used in the push notification text, and buttons for everything below) |
+| `Shift+N` | Push the Day-2-morning notification ("Your new card is on its way. We'll call you at [time] as agreed.") |
+| `Shift+C` | Ring the phone with the Day-2 incoming call. Tapping **Answer** on screen places the real outbound LiveKit call and opens its live transcript in the side panel; **Decline** just dismisses the ring |
+| `Shift+R` | Full reset: ends any active call, hides the notification/ring, returns the phone to the home screen, closes the side panel, and resets the chat conversation so reopening it starts fresh |
+
+The inbox (mail icon on the phone's home screen) always has the
+prerequisite message in it — that one doesn't need a hotkey, it's meant to
+already be there before Day 2 starts. Full automation (auto-advancing the
+Day-2 beats on a timer instead of a hotkey) is intentionally not built yet.
 
 ## 3. Supabase (optional, recommended before the real demo)
 
@@ -231,22 +256,33 @@ The demo is built to keep going rather than get stuck:
 
 ```
 index.html
+demo-1.html                    — Part 1 (its own entry point, main-demo1.js)
 src/
-  main.js                     — wires everything together
+  main.js                     — wires everything together (Part 2)
+  main-demo1.js               — wires everything together (Part 1)
   config.js                   — entry-point IDs, Supabase config (env-driven)
-  state.js                    — single appState object
+  state.js                    — single appState object (Part 2)
   data/
     customers.js              — Supabase-or-fallback customer lookup
     fallbackCustomers.js       — local demo data
   integrations/
-    livekit.js                 — WebRTC call, live transcript, agent bridge
+    livekit.js                 — WebRTC call, live transcript, agent bridge (Part 2)
+    livekitDemo1.js              — Day-2 outbound call (Part 1), same pattern
+    chatApi.js                   — boost.ai Chat API v2 client (Part 1, Day 1)
     supabase.js                 — customer fetch + optional session realtime
   ui/
-    phone.js                    — phone screen rendering
-    transcript.js                — transcript bubbles
-    auth.js                      — CIBA-style auth state machine
-    customerPanel.js              — locked/unlocked customer info panel
-    presenter.js                  — hidden hotkeys/panel, full reset
+    phone.js                    — phone screen rendering (Part 2)
+    phoneDemo1.js                 — phone screen rendering (Part 1): in-app
+                                     nav, push banner, ring/in-call views
+    sidePanel.js                  — Part 1's side panel mode switching
+                                     (placeholder / live chat / call transcript)
+    chatPanel.js                  — Part 1's live chat rendering
+    transcript.js                — transcript bubbles (Part 2, Finnish labels)
+    transcriptDemo1.js            — transcript bubbles (Part 1, English labels)
+    auth.js                      — CIBA-style auth state machine (Part 2)
+    customerPanel.js              — locked/unlocked customer info panel (Part 2)
+    presenter.js                  — hidden hotkeys/panel, full reset (Part 2)
+    presenterDemo1.js             — hidden hotkeys/panel, full reset (Part 1)
   styles/
-    main.css, phone.css, panels.css
+    main.css, phone.css, panels.css, chat.css
 ```
