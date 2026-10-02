@@ -18,6 +18,61 @@ const DUMMY_SUMMARY =
   "had been received. Transferred to a specialist for the estate question.";
 
 let interactionId = null;
+let ringTimerInterval = null;
+let ringToneInterval = null;
+let ringStartedAt = null;
+let audioCtx = null;
+
+/* Two short synthesized tones (not a reproduction of any vendor's actual
+   ringtone) so there's no asset to host and no autoplay-blocked <audio> file
+   — just a brief oscillator blip, repeated every few seconds while ringing. */
+function playRingTone() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    [0, 0.42].forEach((offset) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 950;
+      gain.gain.setValueAtTime(0.0001, now + offset);
+      gain.gain.exponentialRampToValueAtTime(0.16, now + offset + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.35);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(now + offset);
+      osc.stop(now + offset + 0.4);
+    });
+  } catch (e) {
+    console.warn('[genesys] ring tone unavailable (non-fatal):', e);
+  }
+}
+
+function startRinging() {
+  ringStartedAt = Date.now();
+  updateRingTimer();
+  ringTimerInterval = setInterval(updateRingTimer, 1000);
+  playRingTone();
+  ringToneInterval = setInterval(playRingTone, 3500);
+}
+
+function stopRinging() {
+  if (ringTimerInterval) clearInterval(ringTimerInterval);
+  if (ringToneInterval) clearInterval(ringToneInterval);
+  ringTimerInterval = null;
+  ringToneInterval = null;
+}
+
+function updateRingTimer() {
+  const secs = Math.floor((Date.now() - ringStartedAt) / 1000);
+  const mm = String(Math.floor(secs / 60)).padStart(2, '0');
+  const ss = String(secs % 60).padStart(2, '0');
+  setText('genesysRingTimer', `Ringing… ${mm}:${ss}`);
+}
+
+function setHidden(id, hidden) {
+  const el = document.getElementById(id);
+  if (el) el.hidden = hidden;
+}
 
 function setText(id, text) {
   const el = document.getElementById(id);
@@ -55,9 +110,26 @@ function renderCustomer(customer) {
   setText('genesysEmail', customer.email || '—');
 }
 
+/* Opens the overlay in its "ringing" state — simulating the transferred call
+   landing on a human agent's softphone. Call this from the visible Genesys
+   button OR automatically from a LiveKit handoff signal (see livekit.js) —
+   both paths funnel through here. */
 export function openGenesysView() {
   const overlay = document.getElementById('genesysOverlay');
   if (!overlay) return;
+  overlay.hidden = false;
+  setText('genesysLivePillText', 'Ringing');
+  setHidden('genesysRinging', false);
+  setHidden('genesysWorkspace', true);
+  startRinging();
+}
+
+/* The "human agent" picks up: reveal the customer info + summary workspace. */
+function answerCall() {
+  stopRinging();
+  setHidden('genesysRinging', true);
+  setHidden('genesysWorkspace', false);
+  setText('genesysLivePillText', 'Active interaction');
 
   const customer = appState.auth.customer || FALLBACK_CUSTOMERS[0];
   renderCustomer(customer);
@@ -65,11 +137,10 @@ export function openGenesysView() {
 
   if (!interactionId) interactionId = randomInteractionId();
   setText('genesysInteractionId', interactionId);
-
-  overlay.hidden = false;
 }
 
 export function closeGenesysView() {
+  stopRinging();
   const overlay = document.getElementById('genesysOverlay');
   if (overlay) overlay.hidden = true;
 }
@@ -82,6 +153,8 @@ export function resetGenesysView() {
 export function initGenesysView() {
   const openBtn = document.getElementById('genesysTriggerBtn');
   const closeBtn = document.getElementById('genesysCloseBtn');
+  const answerBtn = document.getElementById('genesysAnswerBtn');
   if (openBtn) openBtn.addEventListener('click', openGenesysView);
   if (closeBtn) closeBtn.addEventListener('click', closeGenesysView);
+  if (answerBtn) answerBtn.addEventListener('click', answerCall);
 }

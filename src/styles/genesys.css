@@ -95,6 +95,79 @@
 
 .genesys-close:hover { background: rgba(255, 255, 255, 0.16); }
 
+/* ---- Ringing / incoming-call state ---- */
+.genesys-ringing {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  padding: 24px;
+}
+
+.genesys-ring-pulse {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.genesys-ring-pulse span {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 79, 31, 0.45);
+  animation: genesysRing 1.8s ease-out infinite;
+}
+
+.genesys-ring-pulse span:nth-child(2) { animation-delay: 0.4s; }
+.genesys-ring-pulse span:nth-child(3) { animation-delay: 0.8s; }
+
+@keyframes genesysRing {
+  0% { transform: scale(0.55); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.genesys-ring-core {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gx-orange);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.genesys-ring-title { font-size: 18px; font-weight: 700; color: var(--sp-ink); }
+.genesys-ring-sub { font-size: 13px; color: var(--sp-gray-700); }
+.genesys-ring-timer { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--sp-gray-700); }
+
+.genesys-answer-btn {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1fa454;
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(31, 164, 84, 0.3);
+  animation: callPulse 1.2s infinite;
+}
+
+.genesys-answer-btn:hover { transform: translateY(-1px); }
+
 .genesys-body {
   flex: 1;
   overflow-y: auto;

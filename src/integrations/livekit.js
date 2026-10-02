@@ -11,6 +11,7 @@ import { appState } from '../state.js';
 import { getRoomFromToken, openSessionSubscription, closeSessionSubscription } from './supabase.js';
 import { onTranscriptSegment, clearTranscript, setLiveDot } from '../ui/transcript.js';
 import { triggerAuthentication, initiateAuthentication } from '../ui/auth.js';
+import { openGenesysView } from '../ui/genesys.js';
 import * as phoneUI from '../ui/phone.js';
 
 let room = null;
@@ -89,6 +90,10 @@ function handleAgentDataMessage(payload) {
       case 'authentication_completed':
       case 'authenticate':
         triggerAuthentication(customerId);
+        break;
+      case 'handoff_to_human':
+      case 'transfer_to_human':
+        openGenesysView();
         break;
       default:
         console.warn('[livekit] unhandled agent action:', msg.action);

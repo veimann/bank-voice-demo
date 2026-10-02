@@ -39,7 +39,7 @@ export function onTranscriptSegment(id, rawText, isFinal, role) {
     bubble.className = 't-bubble t-' + role + (isFinal ? '' : ' partial');
     const speakerEl = document.createElement('span');
     speakerEl.className = 't-speaker';
-    speakerEl.textContent = role === 'assistant' ? 'S-Pankki Assistant' : 'Customer';
+    speakerEl.textContent = role === 'assistant' ? 'Aulis AI Agentti' : 'Asiakas';
     const textEl = document.createElement('span');
     textEl.className = 't-text';
     textEl.textContent = text;
