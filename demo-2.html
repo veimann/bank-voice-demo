@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>S-Pankki Voice Banking — Live Demo</title>
+  <meta name="description" content="S-Pankki AI voice banking assistant — live WebRTC demo" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2300AA46'/%3E%3Ctext x='50' y='67' font-size='54' font-family='Arial, sans-serif' font-weight='700' fill='white' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <link rel="stylesheet" href="/src/styles/phone.css" />
+  <link rel="stylesheet" href="/src/styles/panels.css" />
+  <link rel="stylesheet" href="/src/styles/genesys.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="mark">S</div>
+      <div>
+        <h1>S-Pankki</h1>
+        <p class="tagline">AI Voice Banking Assistant — Live Demo</p>
+      </div>
+      <button class="genesys-trigger" id="genesysTriggerBtn" type="button">
+        <span class="genesys-trigger-dot"></span>
+        Genesys
+      </button>
+    </header>
+
+    <main class="stage">
+      <!-- ============== PHONE ============== -->
+      <section class="phone-column" aria-label="Phone">
+        <div class="phone is-idle" id="phone">
+          <div class="phone-island"></div>
+          <div class="phone-screen">
+
+            <div class="status-bar">
+              <span class="time" id="statusClock">9:41</span>
+              <div class="status-icons" aria-hidden="true">
+                <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="6" width="2.6" height="5" rx="0.8"/><rect x="4.4" y="4" width="2.6" height="7" rx="0.8"/><rect x="8.8" y="2" width="2.6" height="9" rx="0.8"/><rect x="13.2" y="0" width="2.6" height="11" rx="0.8"/></svg>
+                <svg width="15" height="11" viewBox="0 0 24 18" fill="currentColor"><path d="M12 16.5a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2Zm-4.9-5a7 7 0 0 1 9.8 0 .9.9 0 0 1-1.3 1.3 5.2 5.2 0 0 0-7.2 0 .9.9 0 1 1-1.3-1.3Zm-3.3-3.4a11.7 11.7 0 0 1 16.4 0 .9.9 0 1 1-1.3 1.3 9.9 9.9 0 0 0-13.8 0 .9.9 0 0 1-1.3-1.3Z"/></svg>
+                <svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="currentColor"/><rect x="2" y="2" width="14" height="8" rx="1.5" fill="currentColor"/><rect x="21.5" y="4" width="2" height="4" rx="1" fill="currentColor"/></svg>
+              </div>
+            </div>
+
+            <!-- CIBA-style push notification -->
+            <div class="ciba-banner" id="cibaBanner" role="button" tabindex="0" aria-label="Open S-Pankki verification notification">
+              <div class="ciba-icon">S</div>
+              <div class="ciba-copy">
+                <div class="ciba-title">S-Pankki</div>
+                <div class="ciba-sub">Tap to verify your identity</div>
+              </div>
+              <div class="ciba-now">now</div>
+            </div>
+
+            <!-- Idle / in-call view -->
+            <div class="call-view">
+              <div class="call-avatar">S</div>
+              <div class="call-name">S-Pankki</div>
+              <div class="call-sub" id="callSub">Customer Service</div>
+              <div class="call-timer" id="callTimer"></div>
+
+              <div class="call-actions">
+                <button class="call-btn call-btn--start" id="callStartBtn" aria-label="Call S-Pankki" type="button">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1.02L6.6 10.8Z"/></svg>
+                </button>
+                <button class="call-btn call-btn--mute" id="callMuteBtn" aria-label="Mute microphone" type="button" hidden>
+                  <svg id="micOnIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M9 21h6"/></svg>
+                  <svg id="micOffIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" hidden><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M9 21h6"/><path d="M4 4l16 16"/></svg>
+                </button>
+                <button class="call-btn call-btn--end" id="callEndBtn" aria-label="End call" type="button" hidden>
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(135deg)"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1.02L6.6 10.8Z"/></svg>
+                </button>
+              </div>
+
+              <p class="call-error" id="callError" hidden></p>
+            </div>
+
+            <!-- Face ID style overlay -->
+            <div class="faceid-overlay" id="faceidOverlay">
+              <div class="faceid-rings">
+                <span></span><span></span><span></span>
+                <div class="faceid-core">
+                  <svg class="faceid-face" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 4h-.5A3.5 3.5 0 0 0 4 7.5V8"/><path d="M16 4h.5A3.5 3.5 0 0 1 20 7.5V8"/><path d="M8 20h-.5A3.5 3.5 0 0 1 4 16.5V16"/><path d="M16 20h.5a3.5 3.5 0 0 0 3.5-3.5V16"/><path d="M9 10v1.2"/><path d="M15 10v1.2"/><path d="M12 10.5v2.8c0 .5-.4.9-.9.9h-.4"/><path d="M9 16.2c.9.6 1.9.9 3 .9s2.1-.3 3-.9"/></svg>
+                  <svg class="faceid-check" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9.5 17 19 7.5"/></svg>
+                </div>
+              </div>
+              <div class="faceid-label" id="faceidLabel">Scanning…</div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== TRANSCRIPT ============== -->
+      <section class="panel transcript-panel" aria-label="Live transcript">
+        <div class="panel-header">
+          <h2>Live Transcript</h2>
+          <span class="live-dot" id="transcriptDot" aria-hidden="true"></span>
+        </div>
+        <div class="transcript-body" id="transcriptBody">
+          <p class="transcript-empty" id="transcriptEmpty">Transcript will appear here once the call connects.</p>
+        </div>
+      </section>
+
+      <!-- ============== CUSTOMER INFO ============== -->
+      <section class="panel info-panel" aria-label="Customer information">
+        <div class="panel-header">
+          <h2>Customer Information</h2>
+        </div>
+
+        <div class="info-locked" id="infoLocked">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <p id="infoLockedText">Sign in through the S-Pankki app notification to view customer details.</p>
+        </div>
+
+        <div class="info-unlocked" id="infoUnlocked" hidden>
+          <div class="info-top">
+            <div class="info-avatar" id="infoAvatar"></div>
+            <div>
+              <div class="info-name" id="infoName"></div>
+              <div class="info-badge">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9.5 17 19 7.5"/></svg>
+                Verified
+              </div>
+            </div>
+          </div>
+          <dl class="info-rows">
+            <div class="info-row"><dt>Personal ID</dt><dd id="infoPersonalId"></dd></div>
+            <div class="info-row"><dt>Date of birth</dt><dd id="infoDob"></dd></div>
+            <div class="info-row"><dt>Phone</dt><dd id="infoPhone"></dd></div>
+            <div class="info-row"><dt>Email</dt><dd id="infoEmail"></dd></div>
+            <div class="info-row"><dt>Segment</dt><dd id="infoSegment"></dd></div>
+          </dl>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Genesys-style contact-center handoff mockup, toggled by the visible "Genesys" button -->
+  <div class="genesys-overlay" id="genesysOverlay" hidden>
+    <div class="genesys-topbar">
+      <div class="genesys-brand">genesys<span class="genesys-brand-dot">•</span>cloud</div>
+      <div class="genesys-interaction-meta">
+        <span class="genesys-live-pill"><span class="dot"></span><span id="genesysLivePillText">Ringing</span></span>
+        <span class="genesys-meta-text">Voice &middot; Transferred from AI Assistant</span>
+      </div>
+      <button class="genesys-close" id="genesysCloseBtn" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        Back to call view
+      </button>
+    </div>
+
+    <!-- Ringing state: simulates the transferred call landing on a human agent's softphone -->
+    <div class="genesys-ringing" id="genesysRinging">
+      <div class="genesys-ring-pulse">
+        <span></span><span></span><span></span>
+        <div class="genesys-ring-core">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1.02L6.6 10.8Z"/></svg>
+        </div>
+      </div>
+      <div class="genesys-ring-title">Incoming interaction</div>
+      <div class="genesys-ring-sub">Transferred from AI Assistant &middot; Personal Banking queue</div>
+      <div class="genesys-ring-timer" id="genesysRingTimer">Ringing&hellip; 00:00</div>
+      <button class="genesys-answer-btn" id="genesysAnswerBtn" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1.02L6.6 10.8Z"/></svg>
+        Answer
+      </button>
+    </div>
+
+    <div class="genesys-body" id="genesysWorkspace" hidden>
+      <section class="genesys-card">
+        <h3>Customer</h3>
+        <div class="genesys-customer-top">
+          <div class="genesys-avatar" id="genesysAvatar">?</div>
+          <div>
+            <div class="genesys-customer-name" id="genesysName">Not yet identified</div>
+            <div class="genesys-customer-segment" id="genesysSegment"></div>
+          </div>
+        </div>
+        <dl class="genesys-rows">
+          <div class="genesys-row"><dt>Personal ID</dt><dd id="genesysPersonalId">—</dd></div>
+          <div class="genesys-row"><dt>Date of birth</dt><dd id="genesysDob">—</dd></div>
+          <div class="genesys-row"><dt>Phone</dt><dd id="genesysPhone">—</dd></div>
+          <div class="genesys-row"><dt>Email</dt><dd id="genesysEmail">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="genesys-card">
+        <h3>AI Conversation Summary</h3>
+        <p class="genesys-summary-text" id="genesysSummary">—</p>
+        <h3>Interaction</h3>
+        <dl class="genesys-rows">
+          <div class="genesys-row"><dt>Queue</dt><dd id="genesysQueue">Personal Banking</dd></div>
+          <div class="genesys-row"><dt>Interaction ID</dt><dd id="genesysInteractionId">—</dd></div>
+          <div class="genesys-row"><dt>Wait time</dt><dd id="genesysWaitTime">00:42</dd></div>
+        </dl>
+      </section>
+    </div>
+  </div>
+
+  <!-- Hidden presenter controls — revealed with Shift+P -->
+  <div class="presenter-panel" id="presenterPanel">
+    <h3>Presenter Controls</h3>
+    <label for="presenterCustomerSelect">Demo customer</label>
+    <select id="presenterCustomerSelect"></select>
+    <button id="presenterAuthBtn" type="button">Trigger authentication (Shift+A)</button>
+    <button id="presenterEnglishBtn" type="button">Start English test call (Shift+E)</button>
+    <button id="presenterResetBtn" type="button">Reset demo (Shift+R)</button>
+    <div class="presenter-status" id="presenterStatus"></div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

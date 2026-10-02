@@ -78,28 +78,52 @@ function stopDurationTimer() {
    authentication state machine the presenter hotkey uses, once it's ready
    to do so live during a call — no frontend changes needed then. */
 function handleAgentDataMessage(payload) {
+  let raw = '';
   try {
-    const text = new TextDecoder().decode(payload);
-    const msg = JSON.parse(text);
-    if (!msg || !msg.action) return;
-    const customerId = msg.payload && msg.payload.customer_id;
-    switch (msg.action) {
-      case 'authentication_initiated':
-        initiateAuthentication(customerId);
-        break;
-      case 'authentication_completed':
-      case 'authenticate':
-        triggerAuthentication(customerId);
-        break;
-      case 'handoff_to_human':
-      case 'transfer_to_human':
-        openGenesysView();
-        break;
-      default:
-        console.warn('[livekit] unhandled agent action:', msg.action);
+    raw = new TextDecoder().decode(payload);
+  } catch (e) {
+    console.warn('[livekit] could not decode agent data message:', e);
+    return;
+  }
+
+  // Be defensive about shape: prefer a JSON envelope like
+  // {"action": "...", "payload": {"customer_id": "..."}}, but also accept
+  // .name/.type instead of .action, and a bare string payload (no JSON at
+  // all) where the whole message IS the action name.
+  let action = null;
+  let customerId = null;
+  try {
+    const msg = JSON.parse(raw);
+    if (msg && typeof msg === 'object') {
+      action = msg.action || msg.name || msg.type || null;
+      customerId = (msg.payload && msg.payload.customer_id) || msg.customer_id || null;
+    } else if (typeof msg === 'string') {
+      action = msg;
     }
   } catch (e) {
-    console.warn('[livekit] could not parse agent data message:', e);
+    action = raw.trim();
+  }
+
+  if (!action) {
+    console.warn('[livekit] agent data message had no recognizable action. Raw payload:', raw);
+    return;
+  }
+
+  switch (action) {
+    case 'authentication_initiated':
+      initiateAuthentication(customerId);
+      break;
+    case 'authentication_completed':
+    case 'authenticate':
+      triggerAuthentication(customerId);
+      break;
+    case 'human_transfer':      // the real boost.ai action name in use
+    case 'handoff_to_human':    // kept as aliases in case it's renamed later
+    case 'transfer_to_human':
+      openGenesysView();
+      break;
+    default:
+      console.warn('[livekit] unhandled agent action:', action, '— raw payload:', raw);
   }
 }
 

@@ -10,12 +10,24 @@
    ========================================================================= */
 import { appState } from '../state.js';
 import { FALLBACK_CUSTOMERS } from '../data/fallbackCustomers.js';
+import { getRecentTranscript } from './transcript.js';
 
-const DUMMY_SUMMARY =
-  "Customer called about their mortgage repayment schedule and an open estate matter. " +
-  "Authenticated via the S-Pankki app during the call. Discussed releasing additional " +
-  "collateral to lower the monthly payment, and asked whether a submitted estate inventory " +
-  "had been received. Transferred to a specialist for the estate question.";
+// Only used as a safety net if Genesys is opened with no real transcript yet
+// (e.g. the presenter clicks the button to rehearse before placing a call).
+const FALLBACK_SUMMARY =
+  "No live transcript is available yet for this interaction. Start a call first " +
+  "so the handoff view can show the real conversation.";
+
+/* Builds the "summary" directly from the real transcript rather than an
+   LLM-written abstract — there's no backend summarization call wired up, so
+   this shows the last few real turns (where the handoff trigger fires),
+   which is accurate and honest for a live demo. Swap this for a true
+   generated summary later if/when a backend call is added. */
+function buildSummaryFromTranscript() {
+  const turns = getRecentTranscript(8);
+  if (!turns.length) return FALLBACK_SUMMARY;
+  return turns.map((t) => `${t.speaker}: ${t.text}`).join('\n');
+}
 
 let interactionId = null;
 let ringTimerInterval = null;
@@ -133,7 +145,7 @@ function answerCall() {
 
   const customer = appState.auth.customer || FALLBACK_CUSTOMERS[0];
   renderCustomer(customer);
-  setText('genesysSummary', DUMMY_SUMMARY);
+  setText('genesysSummary', buildSummaryFromTranscript());
 
   if (!interactionId) interactionId = randomInteractionId();
   setText('genesysInteractionId', interactionId);

@@ -1,12 +1,23 @@
-# S-Pankki Voice Banking — Part 2 Demo
+# boost.ai × S-Pankki RFP Demo
 
-A phone-call microsite for the S-Pankki RFP voice demo: a live WebRTC call with
-the boost.ai voice agent (Finnish by default), a live transcript, a CIBA-style
-in-call authentication moment, and a customer information panel that unlocks
-once authenticated.
+This project is growing into a small multi-page demo hub:
 
-Spoken conversation is Finnish. Every label, button and message in the
-interface itself is in English, as requested.
+- `index.html` — the hub/homepage. Links out to each part.
+- `demo-2.html` — **Part 2: AI Voice Banking** (done, live). A phone-call
+  microsite: a live WebRTC call with the boost.ai voice agent (Finnish by
+  default), a live transcript, a CIBA-style in-call authentication moment, a
+  customer information panel, and a Genesys-style human-handoff view.
+- Part 1 (card dispute: chat → push notification → outbound call) — in
+  progress, not yet in this repo. Its boost.ai voice entry point for the Day-2
+  outbound call: client `SPANKKIRFP`, same session URL as Part 2, external id
+  `24785a28-7bfd-4bfd-825a-7af57d5564fc`.
+- ASRA ecosystem visualization — planned, not yet in this repo.
+
+Spoken conversation is Finnish throughout. Every label, button and message in
+the interface itself is in English, as requested.
+
+The rest of this README currently documents **Part 2** specifically
+(`demo-2.html` and its `src/` code).
 
 ## 1. Prerequisites
 

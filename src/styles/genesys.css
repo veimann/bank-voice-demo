@@ -249,4 +249,7 @@
   line-height: 1.6;
   color: var(--sp-ink);
   margin: 0 0 18px;
+  white-space: pre-line;
+  max-height: 220px;
+  overflow-y: auto;
 }

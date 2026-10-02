@@ -8,6 +8,15 @@
 const DEFAULT_EMPTY_TEXT = 'Transcript will appear here once the call connects.';
 const segmentEls = {};
 
+// Persistent log of finalized turns only (never partials), in order spoken.
+// Used to build the Genesys handoff summary from the real conversation —
+// see getRecentTranscript() below.
+const transcriptLog = [];
+
+function logFinalSegment(role, text) {
+  transcriptLog.push({ role, text });
+}
+
 /* The agent's text can arrive wrapped in SSML, e.g. "<speak>...</speak>" —
    strip any markup tags before displaying it. Customer speech (from STT)
    never contains tags, so this is a no-op for that role. */
@@ -33,6 +42,7 @@ export function onTranscriptSegment(id, rawText, isFinal, role) {
     if (isFinal) {
       bubble.classList.remove('partial');
       delete segmentEls[key];
+      logFinalSegment(role, text);
     }
   } else {
     bubble = document.createElement('div');
@@ -47,6 +57,7 @@ export function onTranscriptSegment(id, rawText, isFinal, role) {
     bubble.appendChild(textEl);
     body.appendChild(bubble);
     if (!isFinal) segmentEls[key] = bubble;
+    else logFinalSegment(role, text);
   }
 
   body.scrollTop = body.scrollHeight;
@@ -54,6 +65,7 @@ export function onTranscriptSegment(id, rawText, isFinal, role) {
 
 export function clearTranscript() {
   Object.keys(segmentEls).forEach((k) => delete segmentEls[k]);
+  transcriptLog.length = 0;
   const body = document.getElementById('transcriptBody');
   if (body) {
     body.innerHTML = '';
@@ -69,4 +81,17 @@ export function clearTranscript() {
 export function setLiveDot(live) {
   const dot = document.getElementById('transcriptDot');
   if (dot) dot.classList.toggle('live', Boolean(live));
+}
+
+/* The last n finalized turns, oldest first — used to build the Genesys
+   handoff summary directly from what was actually said, focused on the end
+   of the call (where the handoff trigger fires). Each entry: {role, speaker,
+   text}. Returns [] if nothing has been finalized yet (e.g. Genesys opened
+   outside a real call). */
+export function getRecentTranscript(n = 8) {
+  return transcriptLog.slice(-n).map((t) => ({
+    role: t.role,
+    speaker: t.role === 'assistant' ? 'Aulis AI Agentti' : 'Asiakas',
+    text: t.text
+  }));
 }

@@ -2,7 +2,6 @@
   command = "npm install && npm run build"
   publish = "dist"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# No catch-all SPA redirect — this is a plain multi-page static site now
+# (index.html = hub, demo-2.html = Part 2, more pages to follow), so each
+# page is served by its own real file.
