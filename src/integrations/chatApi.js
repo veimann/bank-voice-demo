@@ -89,10 +89,12 @@ function storeConversationId(id) {
    (the stored conversation may have expired server-side). Always returns
    {conversationId, messages}. */
 export async function initConversation() {
+  // Requests an English welcome message — the virtual agent will still
+  // auto-detect and switch language based on whatever the user types next.
   const stored = getStoredConversationId();
   if (stored) {
     try {
-      const data = await postCommand({ command: 'RESUME', conversation_id: stored, language: 'fi-FI' });
+      const data = await postCommand({ command: 'RESUME', conversation_id: stored, language: 'en-US' });
       const conversationId = data.conversation && data.conversation.id;
       storeConversationId(conversationId);
       return { conversationId, messages: normalize(data) };
@@ -100,7 +102,7 @@ export async function initConversation() {
       storeConversationId(null); // fall through to START below
     }
   }
-  const data = await postCommand({ command: 'START', language: 'fi-FI' });
+  const data = await postCommand({ command: 'START', language: 'en-US' });
   const conversationId = data.conversation && data.conversation.id;
   storeConversationId(conversationId);
   return { conversationId, messages: normalize(data) };

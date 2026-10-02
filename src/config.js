@@ -21,14 +21,13 @@ export const CONFIG = {
   CHAT_API_URL:
     import.meta.env.VITE_CHAT_API_URL || 'https://spankkirfp.boost.ai/api/chat/v2',
 
-  // Supabase — optional. The URL alone is harmless to ship (it's meant to be
-  // paired with the anon key + RLS, same as any Supabase project), but the
-  // demo still runs on local fallback customer data until VITE_SUPABASE_ANON_KEY
-  // is also set in .env / Netlify env vars. Never put the service-role key here.
+  // Supabase — this is the new-style "publishable" key (sb_publishable_...),
+  // which is Supabase's current name for what used to be called the anon
+  // key: it's meant to be shipped in frontend bundles (same as before, data
+  // access is controlled by RLS, not by keeping this secret). Never put a
+  // sb_secret_... key or the old service-role key here.
   SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || 'https://kuwwxbbsjgtyfrdguzkg.supabase.co',
-  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-  // TODO confirm this matches the real table name (the dashboard only shows
-  // a numeric table id in its URL, not the name) — see README "Supabase".
+  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_Egtb64ftjnezLae9vTAfjQ_vXYC51YO',
   CUSTOMERS_TABLE: import.meta.env.VITE_CUSTOMERS_TABLE || 's_pankki_customers',
 
   // Optional forward-looking hook — see README "Going further".
