@@ -12,9 +12,23 @@ export const CONFIG = {
   VOICE_EXTERNAL_ID_EN:
     import.meta.env.VITE_VOICE_EXTERNAL_ID_EN || '4613c31b-82f7-4d84-855c-8aecf297e084',
 
-  // Supabase — optional. Leave blank to run on local fallback customer data.
-  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || '',
+  // Demo 1 — Day 2 outbound call (same client/session URL pattern as above,
+  // different entry point). Not wired into any UI yet.
+  VOICE_EXTERNAL_ID_DEMO1_DAY2:
+    import.meta.env.VITE_VOICE_EXTERNAL_ID_DEMO1_DAY2 || '24785a28-7bfd-4bfd-825a-7af57d5564fc',
+
+  // Demo 1 — Day 1 live webchat (boost.ai Chat API v2), used by demo-1.html.
+  CHAT_API_URL:
+    import.meta.env.VITE_CHAT_API_URL || 'https://spankkirfp.boost.ai/api/chat/v2',
+
+  // Supabase — optional. The URL alone is harmless to ship (it's meant to be
+  // paired with the anon key + RLS, same as any Supabase project), but the
+  // demo still runs on local fallback customer data until VITE_SUPABASE_ANON_KEY
+  // is also set in .env / Netlify env vars. Never put the service-role key here.
+  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || 'https://kuwwxbbsjgtyfrdguzkg.supabase.co',
   SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+  // TODO confirm this matches the real table name (the dashboard only shows
+  // a numeric table id in its URL, not the name) — see README "Supabase".
   CUSTOMERS_TABLE: import.meta.env.VITE_CUSTOMERS_TABLE || 's_pankki_customers',
 
   // Optional forward-looking hook — see README "Going further".

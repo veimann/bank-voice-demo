@@ -33,6 +33,32 @@ export async function fetchCustomers() {
   }
 }
 
+/* Renames one customer row (full_name only — see README for the narrow
+   RLS/column-privilege setup this needs on the anon role). Best-effort: never
+   throws, returns false on any failure so callers can treat it as optional.
+   Used by persona.js to carry a live-picked demo name into Supabase. */
+export async function updateCustomerName(id, fullName) {
+  if (!isConfigured() || !id) return false;
+  try {
+    const url = `${CONFIG.SUPABASE_URL}/rest/v1/${CONFIG.CUSTOMERS_TABLE}?id=eq.${id}`;
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        apikey: CONFIG.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ full_name: fullName })
+    });
+    if (!res.ok) throw new Error('Supabase name update failed: ' + res.status);
+    return true;
+  } catch (e) {
+    console.warn('[supabase] updateCustomerName failed (non-fatal, local rename still applied):', e.message);
+    return false;
+  }
+}
+
 /* Decode the LiveKit room name out of the session JWT (no library needed —
    base64url-decode segment 1). Used to correlate a call with Supabase state. */
 export function getRoomFromToken(token) {

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>S-Pankki — Demo 1: The payment that wasn't hers</title>
+  <meta name="description" content="Demo 1 Day 1: live S-mobiili chat with the S-Pankki virtual agent" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <link rel="stylesheet" href="/src/styles/phone.css" />
+  <link rel="stylesheet" href="/src/styles/chat.css" />
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="mark">S</div>
+      <div>
+        <h1>Demo 1 — Day 1: S-mobiili chat</h1>
+        <p class="tagline">Live chat with the real S-Pankki virtual agent. Inbox, push notification, and the Day 2 call are the next build.</p>
+      </div>
+      <a class="hub-link" href="/index.html">&larr; Back to hub</a>
+    </div>
+
+    <div class="stage-single">
+      <div class="phone">
+        <div class="phone-island"></div>
+        <div class="phone-screen">
+
+          <!-- HOME SCREEN -->
+          <div id="appHome" class="app-home">
+            <div class="app-topbar">
+              <span class="app-topbar-title">S-mobiili</span>
+              <span class="app-topbar-greeting" id="appGreeting">Hei!</span>
+            </div>
+            <div class="balance-card">
+              <p class="balance-label">Käyttötili</p>
+              <p class="balance-amount">2 418,32 €</p>
+              <p class="balance-sub">&bull;&bull;&bull;&bull; 4471</p>
+            </div>
+            <button type="button" class="fab-chat" id="openChatBtn">
+              <span class="fab-chat-dot"></span>
+              Chat with us
+            </button>
+          </div>
+
+          <!-- CHAT SCREEN -->
+          <div id="appChat" class="app-chat" hidden>
+            <div class="chat-header">
+              <button type="button" class="chat-back" id="chatBackBtn" aria-label="Back">&larr;</button>
+              <div class="chat-header-info">
+                <span class="chat-header-name">Aulis</span>
+                <span class="chat-header-status"><span class="chat-online-dot"></span> AI Assistant</span>
+              </div>
+            </div>
+            <div class="chat-body" id="chatBody"></div>
+            <form class="chat-input-bar" id="chatForm">
+              <input type="text" id="chatInput" placeholder="Kirjoita viesti…" autocomplete="off" />
+              <button type="submit" id="chatSendBtn" class="chat-send-btn" aria-label="Send">&rarr;</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main-demo1.js"></script>
+</body>
+</html>

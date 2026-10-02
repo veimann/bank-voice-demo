@@ -53,13 +53,17 @@ The customer information panel works out of the box using a small local
 fallback dataset (two demo customers), so you can rehearse the whole flow
 immediately. To show live data from Supabase instead:
 
-1. In `.env`, set:
+1. The project URL is already wired in as a default
+   (`https://kuwwxbbsjgtyfrdguzkg.supabase.co`). Still needed, in `.env` (or
+   as Netlify env vars for the deployed site):
    ```
-   VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
    VITE_SUPABASE_ANON_KEY=your-anon-public-key
-   VITE_CUSTOMERS_TABLE=s_pankki_customers
+   VITE_CUSTOMERS_TABLE=the-real-table-name
    ```
-   Use the **anon/publishable key only** — never the service-role key.
+   Use the **anon/publishable key only** — never the service-role key. The
+   Supabase dashboard's table editor URL only shows a numeric table id, not
+   its name — open the table and check the name shown above the grid (the
+   code currently defaults to `s_pankki_customers`; confirm or correct it).
 
 2. Make sure Row Level Security allows **read-only** access to just the
    columns the panel needs:
@@ -82,6 +86,27 @@ immediately. To show live data from Supabase instead:
    grant select on customers_public to anon;
    ```
 
+3. **Only if you want the hub's "set demo persona" name to also update
+   Supabase** (it always updates locally regardless — see section 3b below),
+   add a narrow write policy. This only ever allows changing `full_name`,
+   never anything else, by combining a column-level grant with a row policy:
+   ```sql
+   grant update (full_name) on s_pankki_customers to anon;
+
+   create policy "anon can rename the demo customer"
+   on s_pankki_customers
+   for update
+   to anon
+   using (true)
+   with check (true);
+   ```
+   Since the anon key ships inside the deployed site's JS bundle (anyone can
+   view-source it), anyone could in principle call this endpoint directly.
+   The `grant update (full_name)` above limits the blast radius to that one
+   column; if you want to go further, scope the policy to one specific row
+   instead of `using (true)` — e.g. `using (id = 'the-demo-customer-row-id')`
+   — using the actual row id from the table editor.
+
 If Supabase is unreachable at any point (wrong keys, RLS misconfigured, no
 network), the app silently falls back to the local demo data — the
 presentation never breaks because of it. The presenter panel's status line
@@ -89,6 +114,23 @@ tells you which source is active ("Supabase (live)" vs "local fallback").
 
 Only the customer master-data table is used. Loans, collateral, estates,
 credit decisions and next-best-offers are deliberately not shown here.
+
+### 3b. Setting the demo persona name
+
+The hub page (`index.html`) has a small "Set up this demo" box: type a name
+(or click "Random name") and it becomes the customer's name everywhere —
+Demo 1 and Demo 2 both read it. It works in three layers, in order:
+
+1. Saved to the browser's `localStorage`, so it survives navigating between
+   pages during the demo.
+2. Applied immediately to the in-memory customer cache, so it shows up even
+   with no network at all.
+3. Sent to Supabase as an `UPDATE … SET full_name = …` on that customer's
+   row, **only if** Supabase is configured with the write policy from step 3
+   above. If this step fails or isn't configured, 1 and 2 already cover the
+   demo — nothing breaks.
+
+See `src/persona.js`.
 
 ## 4. Deploy to Netlify
 
