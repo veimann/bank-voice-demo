@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ASRA Ecosystem Map — boost.ai × S-Pankki</title>
+  <meta name="description" content="Living, zoomable map of the ASRA ecosystem — components, data flows and where boost.ai fits" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/asra-map.css" />
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/index.html" title="Back to the demo hub">
+      <span class="brand-mark"><img src="/brand/boost-mark-white.svg" alt="" /></span>
+      <span class="brand-text"><strong>boost.ai</strong> × S-Pankki <span class="sep">·</span> ASRA Ecosystem Map</span>
+    </a>
+    <div class="top-actions">
+      <a class="pill-link" href="/asra.html#3-1">&larr; Walkthrough</a>
+      <button class="icon-btn" id="btnFit" title="Fit to screen (0)" aria-label="Fit to screen">
+        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><rect x="8.5" y="8.5" width="7" height="7" rx="1"/></svg>
+      </button>
+      <button class="icon-btn" id="btnFull" title="Fullscreen (F)" aria-label="Fullscreen">
+        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+      <button class="icon-btn" id="btnHelp" title="Shortcuts (?)" aria-label="Shortcuts">?</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="side">
+      <p class="side-eyebrow">Flows</p>
+      <p class="side-lead">Pick a flow to see how it moves through the ecosystem.</p>
+      <div class="flow-list" id="flowList"></div>
+
+      <div class="side-actions">
+        <button class="side-btn" id="btnTour"><span class="tour-ico"></span><span id="tourLabel">Play tour</span></button>
+        <button class="side-btn boost" id="btnFootprint"><i class="mark"></i>boost.ai footprint</button>
+      </div>
+
+      <p class="side-eyebrow">Legend</p>
+      <ul class="legend">
+        <li><i class="lg lg-boost"></i>boost.ai</li>
+        <li><i class="lg lg-asra"></i>ASRA module · S-Bank’s choice, any vendor</li>
+        <li><i class="lg lg-core"></i>Core system · system of record</li>
+        <li><i class="lg lg-int"></i>Integration & bank-wide</li>
+        <li><i class="lg lg-ch"></i>Channels, people & ecosystem</li>
+      </ul>
+    </aside>
+
+    <main class="map" id="map">
+      <div class="world" id="world">
+        <svg class="edges" id="edges" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="zones" id="zones"></div>
+        <div class="nodes" id="nodes"></div>
+        <svg class="labels" id="labels" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+      <div class="intro" id="intro">
+        <b>A living map of ASRA.</b>
+        Scroll or pinch to zoom · drag to move · click any box or flow.
+        <span>Zoom in to reveal more detail.</span>
+      </div>
+
+      <div class="zoom-ctl">
+        <button class="icon-btn" id="btnOut" aria-label="Zoom out">−</button>
+        <span id="zoomPct">100%</span>
+        <button class="icon-btn" id="btnIn" aria-label="Zoom in">+</button>
+      </div>
+    </main>
+
+    <aside class="panel" id="panel" hidden>
+      <button class="panel-close" id="panelClose" aria-label="Close">×</button>
+      <div class="panel-body" id="panelBody"></div>
+    </aside>
+  </div>
+
+  <div class="help" id="help" hidden>
+    <div class="help-card">
+      <h4>Exploring the map</h4>
+      <dl>
+        <dt>Scroll / pinch</dt><dd>Zoom at the cursor</dd>
+        <dt>Drag</dt><dd>Move around</dd>
+        <dt>Click a box</dt><dd>Details, boost.ai’s role and its connections</dd>
+        <dt><kbd>1</kbd> – <kbd>7</kbd></dt><dd>Show a flow</dd>
+        <dt><kbd>B</kbd></dt><dd>boost.ai footprint</dd>
+        <dt><kbd>P</kbd></dt><dd>Play / stop the guided tour</dd>
+        <dt><kbd>0</kbd> · <kbd>+</kbd> <kbd>−</kbd></dt><dd>Fit · zoom in / out</dd>
+        <dt><kbd>F</kbd></dt><dd>Fullscreen</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Clear selection</dd>
+        <dt><kbd>W</kbd></dt><dd>Back to the walkthrough</dd>
+      </dl>
+    </div>
+  </div>
+
+  <script type="module" src="/src/asra-map.js"></script>
+</body>
+</html>

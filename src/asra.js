@@ -48,13 +48,116 @@ function inRange(str, k) {
 }
 
 /* ---------- scaling ---------- */
+let baseScale = 1;
 function fit() {
   const w = viewport.clientWidth;
   const h = viewport.clientHeight;
-  const s = Math.min(w / DESIGN_W, h / DESIGN_H);
-  canvas.style.setProperty('--s', s);
+  baseScale = Math.min(w / DESIGN_W, h / DESIGN_H);
+  canvas.style.setProperty('--s', baseScale);
+  clampCam();
+  applyCam();
 }
 window.addEventListener('resize', fit);
+
+/* ---------- camera: mouse-wheel / pinch zoom + drag to pan ----------
+   Zoom is anchored on the cursor. At 100% the slide sits exactly as
+   designed; anything above that can be dragged around. 0 resets. */
+const cam = { z: 1, x: 0, y: 0 };
+const Z_MIN = 1;
+const Z_MAX = 4;
+const camPill = document.createElement('div');
+camPill.className = 'cam-pill';
+document.body.appendChild(camPill);
+let pillTimer = null;
+
+function applyCam(animate = false) {
+  canvas.classList.toggle('cam-anim', animate);
+  canvas.style.setProperty('--z', cam.z);
+  canvas.style.setProperty('--tx', `${cam.x}px`);
+  canvas.style.setProperty('--ty', `${cam.y}px`);
+  viewport.classList.toggle('is-zoomed-in', cam.z > 1.001);
+}
+function clampCam() {
+  if (cam.z <= 1.001) { cam.z = 1; cam.x = 0; cam.y = 0; return; }
+  const S = baseScale * cam.z;
+  const mx = Math.max(0, (DESIGN_W * S - viewport.clientWidth) / 2) + 60;
+  const my = Math.max(0, (DESIGN_H * S - viewport.clientHeight) / 2) + 60;
+  cam.x = Math.max(-mx, Math.min(mx, cam.x));
+  cam.y = Math.max(-my, Math.min(my, cam.y));
+}
+function showPill() {
+  camPill.textContent = cam.z > 1.001
+    ? `${Math.round(cam.z * 100)}%  ·  drag to move  ·  0 to reset`
+    : '100%';
+  camPill.classList.add('show');
+  clearTimeout(pillTimer);
+  pillTimer = setTimeout(() => camPill.classList.remove('show'), 1400);
+}
+function zoomAt(clientX, clientY, factor, animate = false) {
+  const r = viewport.getBoundingClientRect();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  const S = baseScale * cam.z;
+  const ux = (clientX - cx - cam.x) / S;
+  const uy = (clientY - cy - cam.y) / S;
+  cam.z = Math.max(Z_MIN, Math.min(Z_MAX, cam.z * factor));
+  const S2 = baseScale * cam.z;
+  cam.x = clientX - cx - ux * S2;
+  cam.y = clientY - cy - uy * S2;
+  clampCam();
+  applyCam(animate);
+  showPill();
+}
+function zoomCentre(factor) {
+  const r = viewport.getBoundingClientRect();
+  zoomAt(r.left + r.width / 2, r.top + r.height / 2, factor, true);
+}
+function resetCam(animate = true) {
+  if (cam.z === 1 && cam.x === 0 && cam.y === 0) return;
+  cam.z = 1; cam.x = 0; cam.y = 0;
+  applyCam(animate);
+}
+
+viewport.addEventListener('wheel', (e) => {
+  if (isZoomed()) return;
+  e.preventDefault();
+  // Normalise mouse wheels (big deltas) and trackpads / pinch (small deltas).
+  const unit = e.deltaMode === 1 ? 16 : 1;
+  const dy = Math.max(-120, Math.min(120, e.deltaY * unit));
+  const k = e.ctrlKey ? 0.012 : 0.0025;
+  zoomAt(e.clientX, e.clientY, Math.exp(-dy * k));
+}, { passive: false });
+
+let pan = null;
+let suppressClick = false;
+viewport.addEventListener('pointerdown', (e) => {
+  if (e.button !== 0 || cam.z <= 1.001) return;
+  if (e.target.closest('a, button')) return;
+  pan = { id: e.pointerId, sx: e.clientX, sy: e.clientY, x: cam.x, y: cam.y, moved: false };
+});
+window.addEventListener('pointermove', (e) => {
+  if (!pan || e.pointerId !== pan.id) return;
+  const dx = e.clientX - pan.sx;
+  const dy = e.clientY - pan.sy;
+  if (!pan.moved && Math.hypot(dx, dy) < 5) return;
+  if (!pan.moved) { pan.moved = true; viewport.classList.add('is-panning'); }
+  cam.x = pan.x + dx;
+  cam.y = pan.y + dy;
+  clampCam();
+  applyCam();
+});
+window.addEventListener('pointerup', () => {
+  if (pan && pan.moved) {
+    suppressClick = true;
+    setTimeout(() => { suppressClick = false; }, 0);
+  }
+  pan = null;
+  viewport.classList.remove('is-panning');
+});
+viewport.addEventListener('dblclick', (e) => {
+  if (e.target.closest('a, button')) return;
+  if (cam.z > 1.001) resetCam(); else zoomAt(e.clientX, e.clientY, 2, true);
+});
 
 /* ---------- chrome ---------- */
 function buildChrome() {
@@ -122,6 +225,7 @@ function render() {
 }
 
 function go(i, k = 0) {
+  if (i !== state.i) resetCam(false);
   state.i = Math.max(0, Math.min(slides.length - 1, i));
   state.k = Math.max(0, Math.min(stepsOf(state.i) - 1, k));
   render();
@@ -180,6 +284,8 @@ function openZoom(target, animateFrom = true) {
   const maxH = window.innerHeight * 0.82;
   const s = Math.min(maxW / w, maxH / h, 3.2);
   const finalT = `translate(-50%, -50%) scale(${s})`;
+  clone.dataset.fit = String(s);
+  overlayMult = 1;
   clone.style.transform = finalT;
 
   if (animateFrom && !reduceMotion && clone.animate) {
@@ -237,6 +343,10 @@ document.addEventListener('keydown', (e) => {
   if (key === '?' || (key === '/' && e.shiftKey)) { helpEl.hidden = !helpEl.hidden; return; }
   if (key === 'f' || key === 'F') { toggleFullscreen(); return; }
   if (key === 'h' || key === 'H') { window.location.href = '/index.html'; return; }
+  if (key === 'm' || key === 'M') { window.location.href = '/asra-map.html'; return; }
+  if (!isZoomed() && (key === '0')) { resetCam(); showPill(); return; }
+  if (!isZoomed() && (key === '+' || key === '=')) { zoomCentre(1.25); return; }
+  if (!isZoomed() && (key === '-' || key === '_')) { zoomCentre(1 / 1.25); return; }
 
   if (isHelp()) { helpEl.hidden = true; }
 
@@ -267,6 +377,7 @@ document.addEventListener('keydown', (e) => {
 
 // Click to enlarge the innermost zoomable item (links/buttons keep their own behaviour).
 canvas.addEventListener('click', (e) => {
+  if (suppressClick) return;
   const gotoBtn = e.target.closest('[data-goto]');
   if (gotoBtn) { go(state.i, Number(gotoBtn.dataset.goto)); return; }
   if (e.target.closest('a, button')) return;
@@ -275,6 +386,15 @@ canvas.addEventListener('click', (e) => {
 });
 
 zoomEl.addEventListener('click', closeZoom);
+let overlayMult = 1;
+zoomEl.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const clone = zoomHost.firstElementChild;
+  if (!clone) return;
+  const dy = Math.max(-120, Math.min(120, e.deltaY * (e.deltaMode === 1 ? 16 : 1)));
+  overlayMult = Math.max(0.6, Math.min(2.5, overlayMult * Math.exp(-dy * (e.ctrlKey ? 0.012 : 0.0025))));
+  clone.style.transform = `translate(-50%, -50%) scale(${Number(clone.dataset.fit) * overlayMult})`;
+}, { passive: false });
 helpEl.addEventListener('click', () => { helpEl.hidden = true; });
 
 document.getElementById('btnNext').addEventListener('click', next);

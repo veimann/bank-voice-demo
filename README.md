@@ -17,7 +17,17 @@ This project is growing into a small multi-page demo hub:
   ending on a "boost.ai lens" step. `→`/Space step, `Z` or click to enlarge,
   `F` fullscreen, `1–4` jump, `?` help. Deep link with `#<slide>-<step>`,
   e.g. `/asra.html#3-12`. Content is all in `asra.html`; the generic step
-  engine is `src/asra.js`, styles in `src/styles/asra.css`.
+  engine is `src/asra.js`, styles in `src/styles/asra.css`. Scroll/pinch
+  zooms the slide at the cursor (drag to move, `0` resets).
+- `asra-map.html` — **ASRA Ecosystem Map** (live). A pan/zoom "living" map of
+  the ecosystem: channels, boost.ai, ASRA modules (S-Bank's choice, any
+  vendor), people, integration layer, core and bank-wide systems. Seven
+  concept flows (`1–7`), a boost.ai footprint view (`B`), a guided tour
+  (`P`), and a details panel per box. All content — boxes, positions,
+  connections, flow texts — is in `src/data/asraMap.js`. Deep links:
+  `#flow=conv`, `#node=b-orch`, `#boost`.
+- `public/brand/` — boost.ai logo mark (purple + white), used for every
+  "boost.ai" marker.
 
 Spoken conversation is Finnish throughout. Every label, button and message in
 the interface itself is in English, as requested.

@@ -11,7 +11,8 @@ export default defineConfig({
         hub: resolve(__dirname, 'index.html'),
         demo1: resolve(__dirname, 'demo-1.html'),
         demo2: resolve(__dirname, 'demo-2.html'),
-        asra: resolve(__dirname, 'asra.html')
+        asra: resolve(__dirname, 'asra.html'),
+        asraMap: resolve(__dirname, 'asra-map.html')
       }
     }
   }
